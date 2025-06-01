@@ -16,7 +16,7 @@ public class Program
 	private static int height = 600;
 	public static void Main()
 	{
-		Raylib.InitWindow(width,height, "Reeleebetest");
+		Raylib.InitWindow(width,height, "fiddly widdly noddily woddily");
 
 		int canvasWidth = (int)(width * .7f);
 		int outputWidth = width - canvasWidth;
