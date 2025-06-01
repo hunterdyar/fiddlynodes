@@ -1,0 +1,129 @@
+﻿using System.Numerics;
+using System.Security.Cryptography;
+using fiddlyNodes.NodeElements;
+using Raylib_cs;
+
+namespace fiddlyNodes;
+
+public class Node : GridCanvasElement
+{
+	private bool _dragging = false;
+	protected string _title;
+	private List<NodeProperty> _nodeProperties = new List<NodeProperty>();
+	private float _propertyUnitBaseSize = 12;
+	private float _propertyUnitPercentage;
+	private Vector2 _dragStartPosition;
+	public GridCanvas Grid => _grid;
+	private GridCanvas _grid;
+	public Node(int x, int y, int width, int height, GridCanvas grid) : base(x, y, width, height, grid)
+	{
+		_title = "Node";
+		int minWidth = _title.Length * Raylib.GetFontDefault().BaseSize;//baseSize is height not width but... whatever shh.
+		_transform.SetSize(float.Max(width, minWidth),height);
+		_grid = grid;
+		grid.AddChild(this);
+	}
+
+	public override void AddChild(Element element)
+	{
+		if (element is NodeProperty property)
+		{
+			_nodeProperties.Add(property);
+		}
+		base.AddChild(element);
+		Recalculate();
+	}
+	protected void Recalculate()
+	{
+		float propPadding = 1;
+		float y = _propertyUnitBaseSize;//+1, room for title text.
+		float width = _transform.Size.X;
+		foreach (NodeProperty nodeProperty in _nodeProperties)
+		{
+			nodeProperty.Transform.ScaleWithParent = false;//prevent cascading updates
+			
+			width = float.Max(width, nodeProperty.MinWidth);
+			y += propPadding;
+			nodeProperty.Transform.LocalPosition = new Vector2(0, y);
+			//set nodePropertyBaseHeight, let it scale itself up or down....?
+			float localHeight = _propertyUnitBaseSize * nodeProperty.PropHeight;
+			nodeProperty.Transform.Size = new Vector2(width, localHeight);
+			y += localHeight;
+			nodeProperty.Recalculate();
+		}
+		
+		_transform.Size = new Vector2(width,y);
+		
+		//turn scaling back on after we updated our size.
+		foreach (NodeProperty nodeProperty in _nodeProperties)
+		{
+			nodeProperty.Transform.ScaleWithParent = true;
+		}
+		
+		
+		_propertyUnitPercentage = _propertyUnitBaseSize/y;
+	}
+	
+	public override void Draw()
+	{
+		if (!_grid.Transform.OverlapsTransform(_transform)) return;
+		
+		var bounds = _transform.WorldBounds;
+		float propertyHeight = _propertyUnitPercentage * _transform.Size.Y;
+		Raylib.DrawRectangleRounded(bounds, 0, 3, Color.Beige);
+		Raylib.DrawRectangleRoundedLinesEx(bounds, 0, 3, 2, Color.Orange);
+
+		Raylib.DrawText(_title, (int)bounds.X + 5, (int)bounds.Y, (int)float.Floor(propertyHeight), Color.Black);
+
+		base.Draw();
+	}
+	
+
+	public override void OnInput(ref InputEvent inputEvent)
+	{
+		if (_dragging && inputEvent.Type == InputEventType.MouseLeftUp)
+		{
+			_dragging = false;
+			inputEvent.Handle();
+			if (_dragStartPosition != _transform.LocalPosition)
+			{
+				var moveCommand = new MoveNodesCommand(this, _dragStartPosition, _transform.LocalPosition);
+				Program.Commands.AddAndExecute(moveCommand);
+			}
+		}
+
+		if (inputEvent is { Type: InputEventType.MouseLeftDown, Position: not null})
+		{
+			if (_transform.ContainsPoint(inputEvent.Position.Value))
+			{
+				if (_focused && !_dragging)
+				{
+					return;
+				}
+				
+				if (!_dragging)
+				{
+					_dragging = true;
+					Program.Input.RequestFocus(this);
+					_dragStartPosition = this.Transform.LocalPosition;
+					inputEvent.Handle();
+				}
+			}
+
+		}else if (inputEvent is { Type: InputEventType.MouseMove, Delta: not null })
+		{
+			if(_dragging){
+				_transform.Translate(inputEvent.Delta.Value);
+				//inputEvent.Handle();
+			}
+		}
+
+		if (inputEvent is { Type: InputEventType.Hover})
+		{
+			inputEvent.Manager.RequestHover(this);
+			inputEvent.Handle();
+		}
+	}
+	
+	
+}
