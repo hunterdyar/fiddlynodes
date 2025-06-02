@@ -1,7 +1,11 @@
 ## About
 node editor -> tree of SDF operations -> imgage.
 
+![Animated screenshot of the early version of the project](Documentation/fn1.gif)
 ## Architecture
+### FiddlyNodes is the main C# project.
+It contains the rendering engine and the UI framework. It's built on RayLib.
+
 **Thistle** is the rendering stack. Named from the project I took it from, a programming language that compiled to SDF images. Its graph-structure is built around **TreeBaseObject**, and what we are "making" with the node system is just a network of these objects.
 The graph is created by the Output node kicking off a walk backwards along the UI nodes, creating a hierarchical tree structure. Since I ripped this entire structure from another project, it's a little out of place... but it's working well.
 
