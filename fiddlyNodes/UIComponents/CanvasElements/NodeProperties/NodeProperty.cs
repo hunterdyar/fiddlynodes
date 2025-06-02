@@ -17,11 +17,6 @@ public abstract class NodeProperty : Element
 	
 	//number of prop-heights the property takes.
 	public float PropHeight = 1;
-
-	
-	//todo: need to calculate every components position hierarchially. uhg.
-	
-	//relative to the node.
 	
 	public NodeProperty(string propertyName, Node node) : base(0, 0, 20, 12)
 	{
@@ -42,7 +37,6 @@ public abstract class NodeProperty : Element
 	{
 		InputPort?.Recalculate();
 		OutputPort?.Recalculate();
-		
 	}
 	public override void Draw()
 	{
@@ -56,6 +50,7 @@ public abstract class NodeProperty : Element
 		}
 		Raylib.DrawRectangleLines((int)w.X,(int)w.Y,(int)w.Width,(int)w.Height,Color.DarkPurple);
 		//draw property.
+		
 		if (InputPort != null)
 		{
 			InputPort.Draw();
@@ -80,6 +75,14 @@ public abstract class NodeProperty : Element
 		{
 			throw new Exception("Can't add a none port to property.");
 		}
+	}
+
+	public void DrawPropertyName()
+	{
+		var w = _transform.WorldBounds;
+		int fontSize = (int)(w.Height * 0.9f);
+		int vpad = (int)Math.Floor(w.Height - fontSize) / 2; //vertically center
+		Raylib.DrawText(propertyName, (int)w.X + 5, (int)w.Y + vpad, fontSize, Color.Black);
 	}
 
 	public virtual TreeBaseObject GetValue(ThistleType thistleType)

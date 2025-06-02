@@ -7,5 +7,8 @@ public class UnitField : OptionsField<TUnit>
 	public UnitField(int x, int y, int width, int height) : base(x, y, width, height)
 	{
 		Options = new List<TUnit>(TUnit.AllUnits);
+		_selectedIndex = 0;
+		Selected = Options[_selectedIndex];
 	}
+
 }

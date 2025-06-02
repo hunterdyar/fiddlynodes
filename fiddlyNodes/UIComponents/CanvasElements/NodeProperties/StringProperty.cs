@@ -13,7 +13,7 @@ public class StringProperty : NodeProperty
 	public StringProperty(string propertyName, Node node) : base(propertyName, node)
 	{
 		_field = new TextField(0, 0, 20, 12);
-		_transform.AddChild(_field.Transform);
+		AddChild(_field);
 		MinWidth = propertyName.Length * Raylib.GetFontDefault().BaseSize;
 		_transform.ScaleWithParent = true;
 		AddAndSetPort(new Port(this, PortPosition.Output));
@@ -53,6 +53,6 @@ public class StringProperty : NodeProperty
 			return value;
 		}
 
-		throw new InvalidCastException($"String prop cannot provide {wantedType}");
+		throw new InvalidCastException($"String prop cannot provide {wantedType}. Port connection should not have been allowed.");
 	}
 }

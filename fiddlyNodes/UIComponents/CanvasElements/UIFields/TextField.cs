@@ -1,12 +1,15 @@
-﻿using Raylib_cs;
+﻿using fiddlyNodes.Thistle.Library;
+using Raylib_cs;
 
 namespace fiddlyNodes;
 
-public class TextField : Element
+public class TextField : Element, IChangeReporter<TString>
 {
 	public string Value => _value;
 	private string _value = string.Empty;
 	private int _cursorPosition;
+	public Action<TString> OnChange { get; set; }
+
 	
 	public TextField(int x, int y, int width, int height) : base(x, y, width, height)
 	{
@@ -15,6 +18,7 @@ public class TextField : Element
 	public override void Draw()
 	{
 		var bounds = _transform.WorldBounds;
+		//todo: draw-text-in-bounds utility.
 		int fontSize = (int)(bounds.Height * 0.9f);
 		float letterWidth = 0;
 		if (_value.Length > 0)
@@ -45,6 +49,7 @@ public class TextField : Element
 				{
 					_value = _value.Remove(_cursorPosition - 1, 1);
 					_cursorPosition--;
+					OnChange?.Invoke(new TString(_value));
 				}
 
 				inputEvent.Handle();
@@ -55,9 +60,11 @@ public class TextField : Element
 				_cursorPosition++;
 				if(_cursorPosition >= _value.Length){
 					_value += c.ToString();
+					OnChange?.Invoke(new TString(_value));
 				}else
 				{
 					_value = _value.Insert(_cursorPosition, c.ToString());
+					OnChange?.Invoke(new TString(_value));
 				}
 				inputEvent.Handle();
 			}
@@ -72,5 +79,14 @@ public class TextField : Element
 			}
 		}
 		base.OnInput(ref inputEvent);
+	}
+
+	public void SetValue(string s, bool immediate = false)
+	{
+		_value = s;
+		if (!immediate)
+		{
+			OnChange?.Invoke(new TString(_value));
+		}
 	}
 }

@@ -192,4 +192,14 @@ public class WireManager
 			yield break;
 		}
 	}
+
+	public bool HasIncomingConnection(Port port)
+	{
+		if (_incomingWires.TryGetValue(port, out var value))
+		{
+			return value.Count != 0;
+		}
+
+		return false;
+	}
 }

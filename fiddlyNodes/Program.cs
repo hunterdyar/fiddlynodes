@@ -10,6 +10,7 @@ public class Program
 	public readonly static CommandSystem Commands = new CommandSystem();
 	public readonly static InputManager Input = new InputManager();
 	public readonly static Element Hierarchy = new ElementContainer(0,0,640,480);
+	public static OutputContainer OutputContainer;
 	public static RectTransform Root => Hierarchy.Transform;
 	public static OutputNode PrimaryOutputNode;
 	
@@ -23,9 +24,9 @@ public class Program
 		int canvasWidth = (int)(width * .7f);
 		int outputWidth = width - canvasWidth;
 		var gridCanvas = new GridCanvas(0,0,canvasWidth,height);
-		var outputContainer = new OutputContainer(canvasWidth,0,outputWidth,outputWidth);
+		OutputContainer = new OutputContainer(canvasWidth,0,outputWidth,outputWidth);
 		Hierarchy.AddChild(gridCanvas);
-		Hierarchy.AddChild(outputContainer);
+		Hierarchy.AddChild(OutputContainer);
 		
 		//test data
 		PrimaryOutputNode = new OutputNode(300, 100, 20, 20, gridCanvas);

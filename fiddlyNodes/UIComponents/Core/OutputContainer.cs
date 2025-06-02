@@ -6,7 +6,9 @@ namespace fiddlyNodes;
 
 public class OutputContainer : Element
 {
+	public int OutputWidth => outputWidth;
 	private int outputWidth;
+	public int OutputHeight => outputHeight;
 	private int outputHeight;
 	
 	private Color _backgroundColor = Color.Beige;

@@ -124,4 +124,9 @@ public class Port : Element
 	{
 		return wireManager.PropertyFromEnumerable(this);
 	}
+
+	public bool IsConnected()
+	{
+		return wireManager.HasIncomingConnection(this);
+	}
 }

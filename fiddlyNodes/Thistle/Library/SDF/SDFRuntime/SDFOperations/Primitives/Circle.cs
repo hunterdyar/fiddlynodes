@@ -2,7 +2,8 @@
 
 public class Circle : SDFOperationBase
 {
-	private readonly float _radius;
+	
+	private float _radius;
 
 	public Circle(float radius)
 	{
@@ -27,5 +28,10 @@ public class Circle : SDFOperationBase
 		{
 			Parent = Parent
 		};
+	}
+
+	public void SetRadius(float radius)
+	{
+		_radius = radius;
 	}
 }

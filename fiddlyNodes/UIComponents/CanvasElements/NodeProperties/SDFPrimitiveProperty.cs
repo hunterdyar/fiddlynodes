@@ -1,5 +1,6 @@
 ﻿using fiddlyNodes.Thistle;
 using fiddlyNodes.Thistle.Library;
+using Raylib_cs;
 
 namespace fiddlyNodes.NodeElements;
 
@@ -12,7 +13,7 @@ public class SDFConstantProperty : NodeProperty
 	{
 		AddAndSetPort(new Port(this, PortPosition.Output));	
 	}
-
+	
 	public override TreeBaseObject GetValue(ThistleType wantedType)
 	{
 		if (wantedType != ThistleType.tsdfOp)
@@ -21,4 +22,12 @@ public class SDFConstantProperty : NodeProperty
 		}
 		return new TSDFOperation(_operation);
 	}
+
+	public override void Draw()
+	{
+		//todo: 
+		DrawPropertyName();
+		base.Draw();
+	}
+	
 }
