@@ -40,7 +40,6 @@ public class PortConnector
 
 	public void Draw()
 	{
-		
 		if (!_connecting)
 		{
 			return;	

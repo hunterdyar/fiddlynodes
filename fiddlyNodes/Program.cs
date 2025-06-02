@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Numerics;
 using fiddlyNodes.Nodes;
 using Raylib_cs;
 
@@ -16,7 +17,8 @@ public class Program
 	private static int height = 600;
 	public static void Main()
 	{
-		Raylib.InitWindow(width,height, "fiddly widdly noddily woddily");
+		Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
+		Raylib.InitWindow(width,height, "fiddly widdly nodily wodily");
 
 		int canvasWidth = (int)(width * .7f);
 		int outputWidth = width - canvasWidth;
@@ -26,10 +28,9 @@ public class Program
 		Hierarchy.AddChild(outputContainer);
 		
 		//test data
-		PrimaryOutputNode = new OutputNode(0, 0, 20, 20, gridCanvas);
+		PrimaryOutputNode = new OutputNode(300, 100, 20, 20, gridCanvas);
 		var node2 = new FloatNode(40, 20, 30, 30, gridCanvas);
-		var node3 = new CircleNode(60, 40, 20, 20, gridCanvas);
-
+		var node3 = new CircleNode(40, 60, 20, 20, gridCanvas);
 		while (!Raylib.WindowShouldClose())
 		{
 			//first do inputs and controls.
@@ -44,6 +45,11 @@ public class Program
 			
 			Input.DebugDraw();
 			Raylib.EndDrawing();
+
+			if (Raylib.IsWindowResized())
+			{
+				Hierarchy.Transform.Size = new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
+			}
 		}
 	}
 }

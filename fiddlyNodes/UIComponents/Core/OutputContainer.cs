@@ -27,6 +27,7 @@ public class OutputContainer : Element
 
 		var sdf = Program.PrimaryOutputNode.GetValue(w, h) as TSDF;
 		
+		//todo: make parallel
 		for (int y = 0; y < h; y++)
 		{
 			for (int x = 0; x < w; x++)

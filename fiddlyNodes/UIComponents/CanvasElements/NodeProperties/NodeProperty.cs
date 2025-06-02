@@ -86,4 +86,21 @@ public abstract class NodeProperty : Element
 	{
 		return TreeBaseObject.GetDefaultObject(ThistleType.tnone);
 	}
+
+	public override void OnInput(ref InputEvent inputEvent)
+	{
+		base.OnInput(ref inputEvent);
+
+		if (inputEvent is { Type: InputEventType.MouseLeftUp, Position: not null })
+		{
+			if (InputPort != null)
+			{
+				inputEvent.Manager.PortConnector.StopDrag(InputPort);
+			}else if (OutputPort != null)
+			{
+				inputEvent.Manager.PortConnector.StopDrag(OutputPort);
+			}
+		}
+		
+	}
 }

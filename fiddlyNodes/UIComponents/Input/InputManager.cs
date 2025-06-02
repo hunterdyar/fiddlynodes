@@ -267,15 +267,15 @@ public class InputManager
 		if (_hoverierarchy.Count > 0)
 		{
 			var last = _hoverierarchy[0];
-			Raylib.DrawRectangleLinesEx(last.Transform.WorldBounds, 3, Color.Blue);
+			Raylib.DrawRectangleLinesEx(last.Transform.WorldBounds, 1, Color.Blue);
 		}
 
 		if (_hasFocus != null)
 		{
-			Raylib.DrawRectangleLinesEx(_hasFocus.Transform.WorldBounds, 2, Color.Red);
+			Raylib.DrawRectangleLinesEx(_hasFocus.Transform.WorldBounds, 1, Color.Red);
 		}
 
-		Raylib.DrawText($"drag: {_dragging}, focus: {_hasFocus}, hovering: {_hasHover}", 30, 3, 12, Color.Red);
+		Raylib.DrawText($"drag: {_dragging}, focus: {_hasFocus}, hovering: {_hasHover}", 30, Raylib.GetScreenHeight()-16, 12, Color.Red);
 
 	}
 
