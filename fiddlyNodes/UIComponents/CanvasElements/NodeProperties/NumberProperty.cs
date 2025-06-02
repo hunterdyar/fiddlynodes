@@ -7,49 +7,64 @@ namespace fiddlyNodes.NodeElements;
 
 public class NumberProperty : NodeProperty, IChangeReporter<TFloat>
 {
-	private TextField _number;
+	private NumberField _number;
 	private UnitField _unit;
+	private Label _label;
 	public TFloat Value;
+	
+	
 	public Action<TFloat> OnChange { get; set; }
 
-	public NumberProperty(string propertyName, Node node) : base(propertyName, node)
+	public NumberProperty(string propertyName, Node node, PortPosition inputOrOutput) : base(propertyName, node)
 	{
-		_number = new TextField(0,0,20,20);
+		PropHeight = 2;
+		_label = new Label("Radius", TextPosition.Center);
+		_number = new NumberField(0);
 		_number.OnChange += (value) => OnValuesChange();
 		_unit = new UnitField(0, 0, 20, 20);
 		_unit.OnChange += (value) => OnValuesChange();
 		MinWidth = propertyName.Length * Raylib.GetFontDefault().BaseSize;
-		AddAndSetPort(new Port(this,PortPosition.Input));
+		AddAndSetPort(new Port(this, inputOrOutput));
 		Value = new TFloat(0);
 		_number.SetValue("0", true);
+		
 		MinWidth = 100;
 		AddChild(_unit);
 		AddChild(_number);
+		AddChild(_label);
 	}
-
+	
 	public override void Draw()
 	{
-		DrawPropertyName();
-		if (!InputPort.IsConnected())
+		base.Draw();
+
+		if (InputPort == null || !InputPort.IsConnected())
 		{
 			_number.Draw();
+			_unit.Draw();
 		}
-
-		_unit.Draw();
-		base.Draw();
+		_label.Draw();
 	}
 
 	public override void Recalculate()
 	{
 		base.Recalculate();
+
+		float propHeight = _transform.WorldBounds.Size.Y / PropHeight;
+
+		_label.Transform.LocalPosition = new Vector2(0, 0);
+		_label.Transform.Size = new Vector2(_transform.Size.X, propHeight);
 		
-		_unit.Transform.LocalPosition = new Vector2(_transform.Size.X / 2, 0);
-		_unit.Transform.Size = new Vector2(_transform.Size.X / 2, _transform.Size.Y);
+		_unit.Transform.LocalPosition = new Vector2(_transform.Size.X / 2 +2, propHeight);
+		_unit.Transform.Size = new Vector2(_transform.Size.X / 2-2, propHeight);
+		
+		_number.Transform.LocalPosition = new Vector2(2, propHeight);
+		_number.Transform.Size = new Vector2(_transform.Size.X/2 - 2, propHeight);
 	}
 
 	private void OnValuesChange()
 	{
-		float.TryParse(_number.Value, out var numberValue);
+		float.TryParse(_number.TextValue, out var numberValue);
 		switch (_unit.Selected.Value)
 		{
 			case Unit.Pixels:
@@ -68,14 +83,15 @@ public class NumberProperty : NodeProperty, IChangeReporter<TFloat>
 
 	public override TreeBaseObject GetValue(ThistleType thistleType)
 	{
-		if (InputPort.IsConnected())
+		if (InputPort != null && InputPort.IsConnected())
 		{
 			//return the first value, since only one connection should exist.
 			foreach (var nodeProperty in InputPort.PropertiesFrom())
 			{
 				return nodeProperty.GetValue(thistleType);
 			}
-		}
+		}//otherwise...
+		
 		if (thistleType == ThistleType.Tfloat)
 		{
 			return Value;

@@ -11,7 +11,8 @@ public class CircleNode : Node
 	{
 		_title = "Circle";
 		
-		_radiusProp = new NumberProperty("Radius", this);
+		_radiusProp = new NumberProperty("Radius", this, PortPosition.Input);
+		
 		_radiusProp.OnChange += (value) =>
 		{
 			if (sdfOutputProp._operation is Circle circle)
@@ -24,9 +25,8 @@ public class CircleNode : Node
 		{
 			_operation = new Circle(100),
 		};
-		
-		AddChild(sdfOutputProp);
-		AddChild(_radiusProp);
+
+		AddProperties(sdfOutputProp, _radiusProp);
 	}
 	
 	public override void Draw()

@@ -7,6 +7,7 @@ namespace fiddlyNodes;
 
 public class Program
 {
+	
 	public readonly static CommandSystem Commands = new CommandSystem();
 	public readonly static InputManager Input = new InputManager();
 	public readonly static Element Hierarchy = new ElementContainer(0,0,640,480);

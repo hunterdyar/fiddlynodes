@@ -11,7 +11,7 @@ public class OutputNode : Node
 	{
 		_title = "Output";
 		sdfProp = new SDFInputProperty("Value", this);
-		AddChild(sdfProp);
+		AddProperties(sdfProp);
 	}
 
 	//todo: renderingContext instead of width/height to hold all the relevant information.

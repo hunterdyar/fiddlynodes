@@ -9,7 +9,7 @@ public class StringProperty : NodeProperty
 {
 	private TextField _field;
 	//todo: cache, etc.
-	private TreeBaseObject value => new TString(_field.Value);
+	private TreeBaseObject value => new TString(_field.TextValue);
 	public StringProperty(string propertyName, Node node) : base(propertyName, node)
 	{
 		_field = new TextField(0, 0, 20, 12);

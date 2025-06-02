@@ -23,13 +23,8 @@ public abstract class NodeProperty : Element
 		_node = node;
 		///temp testing data that will be in child classes.
 		this.propertyName = propertyName;
-		
-		//todo: yeah yeah it's wrong.
-		//the three comes from the /3 magic number below. 
 		MinWidth = propertyName.Length * Raylib.GetFontDefault().BaseSize;
 		_transform.ScaleWithParent = true;
-
-		//AddAndSetPort(new Port(this,PortPosition.Output));
 	}
 
 
@@ -38,6 +33,7 @@ public abstract class NodeProperty : Element
 		InputPort?.Recalculate();
 		OutputPort?.Recalculate();
 	}
+	
 	public override void Draw()
 	{
 		var w = _transform.WorldBounds;
@@ -77,13 +73,7 @@ public abstract class NodeProperty : Element
 		}
 	}
 
-	public void DrawPropertyName()
-	{
-		var w = _transform.WorldBounds;
-		int fontSize = (int)(w.Height * 0.9f);
-		int vpad = (int)Math.Floor(w.Height - fontSize) / 2; //vertically center
-		Raylib.DrawText(propertyName, (int)w.X + 5, (int)w.Y + vpad, fontSize, Color.Black);
-	}
+	
 
 	public virtual TreeBaseObject GetValue(ThistleType thistleType)
 	{

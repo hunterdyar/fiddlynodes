@@ -10,7 +10,6 @@ public class Node : GridCanvasElement
 	private bool _dragging = false;
 	protected string _title;
 	private List<NodeProperty> _nodeProperties = new List<NodeProperty>();
-	private float _propertyUnitBaseSize = 12;
 	private float _propertyUnitPercentage;
 	private Vector2 _dragStartPosition;
 	public GridCanvas Grid => _grid;
@@ -24,29 +23,29 @@ public class Node : GridCanvasElement
 		grid.AddChild(this);
 	}
 
-	public override void AddChild(Element element)
+	public void AddProperties(params NodeProperty[] properties)
 	{
-		if (element is NodeProperty property)
+		foreach (NodeProperty property in properties)
 		{
 			_nodeProperties.Add(property);
+			AddChild(property);
 		}
-		base.AddChild(element);
 		Recalculate();
 	}
+	
 	protected void Recalculate()
 	{
-		float propPadding = 1;
-		float y = _propertyUnitBaseSize;//+1, room for title text.
+		float propPadding = UISettings.Active.PropertyPadding;
+		float y = UISettings.Active.PropertyBaseHeight+propPadding;//+1, room for title text.
 		float width = _transform.Size.X;
+		width = float.Max(width, _nodeProperties.Max(x=>x.MinWidth));
+
 		foreach (NodeProperty nodeProperty in _nodeProperties)
 		{
 			nodeProperty.Transform.ScaleWithParent = false;//prevent cascading updates
-			
-			width = float.Max(width, nodeProperty.MinWidth);
 			y += propPadding;
 			nodeProperty.Transform.LocalPosition = new Vector2(0, y);
-			//set nodePropertyBaseHeight, let it scale itself up or down....?
-			float localHeight = _propertyUnitBaseSize * nodeProperty.PropHeight;
+			float localHeight = UISettings.Active.PropertyBaseHeight * nodeProperty.PropHeight;
 			nodeProperty.Transform.Size = new Vector2(width, localHeight);
 			y += localHeight;
 			nodeProperty.Recalculate();
@@ -60,8 +59,7 @@ public class Node : GridCanvasElement
 			nodeProperty.Transform.ScaleWithParent = true;
 		}
 		
-		
-		_propertyUnitPercentage = _propertyUnitBaseSize/y;
+		_propertyUnitPercentage = UISettings.Active.PropertyBaseHeight/y;
 	}
 	
 	public override void Draw()
