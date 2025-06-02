@@ -1,5 +1,5 @@
 ## About
-node editor -> tree of SDF operations -> imgage.
+node editor -> tree of SDF operations -> image.
 
 ![Animated screenshot of the early version of the project](Documentation/fn1.gif)
 ## Architecture
@@ -14,9 +14,8 @@ The graph is created by the Output node kicking off a walk backwards along the U
 
 **Element** is the core UI. It's codependent with a RectTransform class (*the only part of this that I had AI help me with, and it was a horrible experience. Can't recommend it, and now the code is hard for me to refactor, buggy, and out of place in the codebase...*). Elements have a Draw function that recursively call their children, and call RayLib draw functions. So it's an immediate-mode GUI.
 
-**GridCanvas** is the element that has all the nodes as it's children. (Actually, it keeps a child object it pans/zooms around with). It has the **WireManager**.
-The wireManager is a hacky insert that basically pretends to be an element for all of the wires. Giving every wire it's own element didn't seem to make sense, although I may change my mind on that.
+**GridCanvas** is the element that has all the nodes as its children. (Actually, it keeps a child object it pans/zooms around with). It has the **WireManager**.
+The wireManager is a hacky insert that basically pretends to be an element for all the wires. Giving every wire it's own element didn't seem to make sense, although I may change my mind on that.
 
-**CommandSystem** is the undo/redo history. Everything you do goes through the Command abstract class and gets executed there, where it's put on a stack that can be undone. Complex commands can have implement their own subcommands, such that - as far as the CommandSystem is concerned - each item is a single point in history to undo/redo to.
+**CommandSystem** is the undo/redo history. Everything you do goes through the Command abstract class and gets executed there, where it's put on a stack that can be undone. Complex commands can implement their own subcommands. It should be - as far as the CommandSystem is concerned - each item is a single point in history to undo/redo to.
 I aim to use the prefix "Do" for actions that the command system calls (the "actual" functions that have effects), and functions that aren't prefixed with "do" would be the ones creating a command.
-
