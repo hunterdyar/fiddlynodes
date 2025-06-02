@@ -29,7 +29,7 @@ public class NumberField : TextField
 				value = value + inputEvent.Delta.Value.Y;
 				SetValue(Math.Clamp(value, minValue, maxValue).ToString());
 				inputEvent.Handle();
-			}
+			} 
 		}
 	}
 }

@@ -5,15 +5,24 @@ using Raylib_cs;
 
 namespace fiddlyNodes.NodeElements;
 
-public class NumberProperty : NodeProperty, IChangeReporter<TFloat>
+public class NumberProperty : NodeValueProperty<TFloat>, IChangeReporter<TFloat>
 {
 	private NumberField _number;
 	private UnitField _unit;
 	private Label _label;
 	public TFloat Value;
 	
-	
 	public Action<TFloat> OnChange { get; set; }
+
+	public override TFloat GetValue()
+	{
+		return Value;
+	}
+
+	public override void SetValue(TFloat value)
+	{
+		Value = value;
+	}
 
 	public NumberProperty(string propertyName, Node node, PortPosition inputOrOutput) : base(propertyName, node)
 	{
@@ -62,22 +71,25 @@ public class NumberProperty : NodeProperty, IChangeReporter<TFloat>
 		_number.Transform.Size = new Vector2(_transform.Size.X/2 - 2, propHeight);
 	}
 
+	/// <summary>
+	/// Internal, called to update number when various values change.
+	/// </summary>
 	private void OnValuesChange()
 	{
 		float.TryParse(_number.TextValue, out var numberValue);
 		switch (_unit.Selected.Value)
 		{
 			case Unit.Pixels:
-				Value = new TFloat(numberValue);
+				Value.Value = numberValue;
 				break;
 			case Unit.PercentHeight:
-				Value = new TFloat(numberValue / 100f * Program.OutputContainer.OutputHeight);
+				Value.Value = numberValue / 100f * Program.OutputContainer.OutputHeight;
 				break;
 			case Unit.PercentWidth:
-				Value = new TFloat(numberValue / 100f * Program.OutputContainer.OutputWidth);
+				Value.Value = numberValue / 100f * Program.OutputContainer.OutputWidth;
 				break;
 		}
-		Value = new TFloat(numberValue);
+		
 		OnChange?.Invoke(Value);
 	}
 
@@ -100,6 +112,9 @@ public class NumberProperty : NodeProperty, IChangeReporter<TFloat>
 		{
 			return new TInt((int)Value.Value);
 		}
+		Console.WriteLine(Value.Value);
 		return base.GetValue(thistleType);
 	}
+
+
 }

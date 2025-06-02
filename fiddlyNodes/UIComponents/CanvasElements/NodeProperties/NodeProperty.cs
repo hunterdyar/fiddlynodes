@@ -14,6 +14,8 @@ public abstract class NodeProperty : Element
 	protected string propertyName;
 	public Node Node => _node;
 	private Node _node;
+
+
 	
 	//number of prop-heights the property takes.
 	public float PropHeight = 1;
