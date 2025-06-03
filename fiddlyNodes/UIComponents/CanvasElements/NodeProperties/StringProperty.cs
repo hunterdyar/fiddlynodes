@@ -5,11 +5,11 @@ using fiddlyNodes.Thistle;
 using fiddlyNodes.Thistle.Library;
 using Raylib_cs;
 
-public class StringProperty : NodeProperty
+public class StringProperty : NodeProperty<TString>
 {
 	private TextField _field;
 	//todo: cache, etc.
-	private TreeBaseObject value => new TString(_field.TextValue);
+	private TString Value => new TString(_field.TextValue);
 	public StringProperty(string propertyName, Node node) : base(propertyName, node)
 	{
 		_field = new TextField(0, 0, 20, 12);
@@ -46,13 +46,8 @@ public class StringProperty : NodeProperty
 		_field.Draw();
 	}
 
-	public override TreeBaseObject GetValue(ThistleType wantedType)
+	public override TString GetValue()
 	{
-		if (wantedType == ThistleType.tstring)
-		{
-			return value;
-		}
-
-		throw new InvalidCastException($"String prop cannot provide {wantedType}. Port connection should not have been allowed.");
+		return Value;
 	}
 }

@@ -5,7 +5,7 @@ using Raylib_cs;
 
 namespace fiddlyNodes.NodeElements;
 
-public class NumberProperty : NodeValueProperty<TFloat>, IChangeReporter<TFloat>
+public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 {
 	private NumberField _number;
 	private UnitField _unit;
@@ -13,17 +13,7 @@ public class NumberProperty : NodeValueProperty<TFloat>, IChangeReporter<TFloat>
 	public TFloat Value;
 	
 	public Action<TFloat> OnChange { get; set; }
-
-	public override TFloat GetValue()
-	{
-		return Value;
-	}
-
-	public override void SetValue(TFloat value)
-	{
-		Value = value;
-	}
-
+	
 	public NumberProperty(string propertyName, Node node, PortPosition inputOrOutput) : base(propertyName, node)
 	{
 		PropHeight = 2;
@@ -93,28 +83,24 @@ public class NumberProperty : NodeValueProperty<TFloat>, IChangeReporter<TFloat>
 		OnChange?.Invoke(Value);
 	}
 
-	public override TreeBaseObject GetValue(ThistleType thistleType)
+	public override TFloat GetValue()
 	{
 		if (InputPort != null && InputPort.IsConnected())
 		{
 			//return the first value, since only one connection should exist.
 			foreach (var nodeProperty in InputPort.PropertiesFrom())
 			{
-				return nodeProperty.GetValue(thistleType);
+				if (nodeProperty is NodeProperty<TFloat> nodeProp)
+				{
+					return nodeProp.GetValue();
+				}
+				else
+				{
+					throw new InvalidCastException("Invalid node connection");
+				}
 			}
 		}//otherwise...
 		
-		if (thistleType == ThistleType.Tfloat)
-		{
-			return Value;
-		}
-		if (thistleType == ThistleType.tint)
-		{
-			return new TInt((int)Value.Value);
-		}
-		Console.WriteLine(Value.Value);
-		return base.GetValue(thistleType);
+		return Value;
 	}
-
-
 }

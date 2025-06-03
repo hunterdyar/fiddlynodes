@@ -13,15 +13,6 @@ public class OutputNode : Node
 		sdfProp = new SDFInputProperty("Value", this);
 		AddProperties(sdfProp);
 	}
-
-	//todo: renderingContext instead of width/height to hold all the relevant information.
-	public TreeBaseObject GetValue(int width, int height)
-	{
-		//this property should get values from what it's connected from as SDFOperations or SDFPrimitives, and smin them.
-		//those properties will recursively walk as needed.
-		var sdf = sdfProp.GetValue(ThistleType.tsdf);
-		// sdf.AddOperation(new Circle(50));
-		// sdf.AddOperation(new Translate(width / 2, height / 2));
-		return sdf;
-	}
+	
+	public TSDF GetValue() => sdfProp.GetValue();
 }

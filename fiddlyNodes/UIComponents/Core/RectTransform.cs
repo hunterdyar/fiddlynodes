@@ -21,7 +21,6 @@ public class RectTransform
     private bool _extendsParent;
     private RectTransform _parent;
     private List<RectTransform> _children;
-    
     // Cached world values - recalculated when dirty
     private Vector2 _worldPosition;
     private Rectangle _worldBounds;
@@ -40,6 +39,7 @@ public class RectTransform
         _localPosition = position;
         _size = size;
     }
+    
     
     #region Properties
 

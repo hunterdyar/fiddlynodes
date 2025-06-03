@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Numerics;
+using fiddlyNodes.Thistle.Library;
 using Raylib_cs;
 
 namespace fiddlyNodes.NodeElements;
@@ -14,8 +15,6 @@ public class Port : Element
 
 	private WireManager wireManager => _nodeProperty.Node.Grid.WireManager;
 	public NodeProperty Property => _nodeProperty;
-
-	
 
 	public Port(NodeProperty nodeProp, PortPosition portPosition) : base(0, 0, 4, 4)
 	{
@@ -86,7 +85,11 @@ public class Port : Element
 
 	public bool CanConnectTo(Port other)
 	{
-		//check type validity.
+		if (!other._nodeProperty.CanConnectTo(_nodeProperty))
+		{
+			return false;
+		}
+		
 		return other.IsInput != IsInput;
 	}
 

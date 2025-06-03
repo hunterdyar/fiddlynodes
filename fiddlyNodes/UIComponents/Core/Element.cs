@@ -10,7 +10,6 @@ public abstract class Element : IHoverable
 	public Element? Parent;
 	public RectTransform Transform => _transform;
 	protected RectTransform _transform;
-	
 	protected bool _focused { get; private set; }
 	protected bool _hovering { get; private set; }
 	public Element(int x, int y, int width, int height)

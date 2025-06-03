@@ -5,7 +5,7 @@ using Raylib_cs;
 
 namespace fiddlyNodes.NodeElements;
 
-public class SDFConstantProperty : NodeProperty
+public class SDFConstantProperty : NodeProperty<TSDFOperation>
 {
 	public SDFOperationBase Operation => _operation;
 	public SDFOperationBase _operation;
@@ -24,12 +24,8 @@ public class SDFConstantProperty : NodeProperty
 		base.Recalculate();
 	}
 
-	public override TreeBaseObject GetValue(ThistleType wantedType)
+	public override TSDFOperation GetValue()
 	{
-		if (wantedType != ThistleType.tsdfOp)
-		{
-			throw new Exception("invalid cast. sdfconstant can only give sdfOps type.");
-		}
 		return new TSDFOperation(_operation);
 	}
 

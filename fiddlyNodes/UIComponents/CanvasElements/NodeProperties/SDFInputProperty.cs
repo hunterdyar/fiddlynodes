@@ -4,7 +4,7 @@ using Raylib_cs;
 
 namespace fiddlyNodes.NodeElements;
 
-public class SDFInputProperty : NodeProperty
+public class SDFInputProperty : NodeProperty<TSDF>
 {
 	public SDFInputProperty(string propertyName, Node node) : base(propertyName, node)
 	{
@@ -30,21 +30,33 @@ public class SDFInputProperty : NodeProperty
 
 	}
 
-	public override TreeBaseObject GetValue(ThistleType wantedType)
+	public override bool CanConnectTo(NodeProperty nodeProperty)
 	{
-		if (wantedType != ThistleType.tsdf)
+		if (nodeProperty is NodeProperty<TSDFOperation>)
 		{
-			throw new Exception("sdfinput can only give sdf.");
+			return true; // We can connect to any TSDFOperation property.
 		}
+		return base.CanConnectTo(nodeProperty);
+	}
+
+	public override TSDF GetValue()
+	{
 		var sdf = new TSDF();
+		int propCount = 0;
 		foreach (var property in InputPort.PropertiesFrom())
 		{
-			var value = property.GetValue(ThistleType.tsdfOp);
-			if (value is TSDFOperation operation)
+			if (property is NodeProperty<TSDFOperation> opProp)
 			{
-				sdf.AddOperation(operation.Value);
+				sdf.AddOperation(opProp.GetValue().Value);
+				propCount++;
 			}
 		}
+
+		if (propCount == 0)
+		{
+			sdf.AddOperation(new Constant(1));
+		}
+		
 		return sdf;
 	}
 }

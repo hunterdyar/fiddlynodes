@@ -16,10 +16,11 @@ public class SDFCircleProperty : SDFConstantProperty
 		
 	}
 
-	public override TreeBaseObject GetValue(ThistleType wantedType)
+	public override TSDFOperation GetValue()
 	{
 		//reach out to the appropriate GetValue calls so it goes up the chain.
-		_circle.SetRadius((Radius.GetValue(ThistleType.Tfloat) as TFloat).Value);
+		var radius = Radius.GetValue();
+		_circle.SetRadius(radius.Value);
 		return circleOp;
 	}
 }

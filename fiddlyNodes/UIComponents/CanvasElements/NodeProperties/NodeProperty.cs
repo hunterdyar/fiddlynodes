@@ -14,8 +14,6 @@ public abstract class NodeProperty : Element
 	protected string propertyName;
 	public Node Node => _node;
 	private Node _node;
-
-
 	
 	//number of prop-heights the property takes.
 	public float PropHeight = 1;
@@ -74,14 +72,7 @@ public abstract class NodeProperty : Element
 			throw new Exception("Can't add a none port to property.");
 		}
 	}
-
 	
-
-	public virtual TreeBaseObject GetValue(ThistleType thistleType)
-	{
-		return TreeBaseObject.GetDefaultObject(ThistleType.tnone);
-	}
-
 	public override void OnInput(ref InputEvent inputEvent)
 	{
 		base.OnInput(ref inputEvent);
@@ -96,6 +87,32 @@ public abstract class NodeProperty : Element
 				inputEvent.Manager.PortConnector.StopDrag(OutputPort);
 			}
 		}
-		
+	}
+
+	public virtual bool CanConnectTo(NodeProperty nodeProperty)
+	{
+		return true;
+	}
+}
+
+public abstract class NodeProperty<T> : NodeProperty where T : TreeBaseObject
+{
+	protected NodeProperty(string propertyName, Node node) : base(propertyName, node)
+	{
+	}
+
+	public override bool CanConnectTo(NodeProperty nodeProperty)
+	{
+		if (nodeProperty is NodeProperty<T> prop)
+		{
+			return base.CanConnectTo(prop);
+		}
+
+		return false;
+	}
+
+	public virtual T GetValue()
+	{
+		throw new NotImplementedException();
 	}
 }

@@ -27,7 +27,7 @@ public class OutputContainer : Element
 		var ox = (int)Transform.WorldPosition.X;
 		var oy = (int)Transform.WorldPosition.Y;
 
-		var sdf = Program.PrimaryOutputNode.GetValue(w, h) as TSDF;
+		var sdf = Program.PrimaryOutputNode.GetValue() as TSDF;
 		
 		//todo: make parallel
 		for (int y = 0; y < h; y++)
