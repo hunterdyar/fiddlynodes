@@ -5,31 +5,40 @@ using Raylib_cs;
 
 namespace fiddlyNodes.NodeElements;
 
-public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
+public class Vec2Property : NodeProperty<TVec2>
 {
-	private NumberField _number;
+	private NumberProperty _x;
+	private NumberProperty _y;
+
 	private UnitField _unit;
 	private Label _label;
-	public TFloat Value;
+	public TVec2 Value;
 	
-	public Action<TFloat> OnChange { get; set; }
+	public Action<TVec2> OnChange { get; set; }
 	
-	public NumberProperty(string propertyName, Node node, PortPosition inputOrOutput) : base(propertyName, node)
+	public Vec2Property(string propertyName, Node node, PortPosition inputOrOutput) : base(propertyName, node)
 	{
-		PropHeight = 2;
-		_label = new Label(propertyName, TextPosition.Center);
-		_number = new NumberField(0);
-		_number.OnChange += (value) => OnValuesChange();
+		PropHeight = 5;//label, x, y.
+		_label = new Label("Vector 2", TextPosition.Center);
+		_x = new NumberProperty("X", node, PortPosition.Input);
+		_x.OnChange += (value) => OnValuesChange();
+		_y = new NumberProperty("Y", node, PortPosition.Input);
+		
+		_y.OnChange += (value) => OnValuesChange();
 		_unit = new UnitField(0, 0, 20, 20);
 		_unit.OnChange += (value) => OnValuesChange();
+		
 		MinWidth = propertyName.Length * Raylib.GetFontDefault().BaseSize;
 		AddAndSetPort(new Port(this, inputOrOutput));
-		Value = new TFloat(0);
-		_number.SetValue("0", true);
+
+		Value = new TVec2(Vector2.Zero);
+		// _x.SetValue("0", true);
+		// _y.SetValue("0", true);
 		
 		MinWidth = 100;
 		AddChild(_unit);
-		AddChild(_number);
+		AddChild(_x);
+		AddChild(_y);
 		AddChild(_label);
 	}
 	
@@ -39,8 +48,9 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 
 		if (InputPort == null || !InputPort.IsConnected())
 		{
-			_number.Draw();
-			_unit.Draw();
+			_x.Draw();
+			_y.Draw();
+		//	_unit.Draw();
 		}
 		_label.Draw();
 	}
@@ -54,11 +64,13 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 		_label.Transform.LocalPosition = new Vector2(0, 0);
 		_label.Transform.Size = new Vector2(_transform.Size.X, propHeight);
 		
-		_unit.Transform.LocalPosition = new Vector2(_transform.Size.X / 2 +2, propHeight);
-		_unit.Transform.Size = new Vector2(_transform.Size.X / 2-2, propHeight);
-		
-		_number.Transform.LocalPosition = new Vector2(2, propHeight);
-		_number.Transform.Size = new Vector2(_transform.Size.X/2 - 2, propHeight);
+		_x.Transform.LocalPosition = new Vector2(2, propHeight);
+		_x.Transform.Size = new Vector2(_transform.Size.X, propHeight*2);
+
+		_y.Transform.LocalPosition = new Vector2(2, propHeight*3);
+		_y.Transform.Size = new Vector2(_transform.Size.X, propHeight*2);
+		_x.Recalculate();
+		_y.Recalculate();
 	}
 
 	/// <summary>
@@ -66,31 +78,18 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 	/// </summary>
 	private void OnValuesChange()
 	{
-		float.TryParse(_number.TextValue, out var numberValue);
-		switch (_unit.Selected.Value)
-		{
-			case Unit.Pixels:
-				Value.Value = numberValue;
-				break;
-			case Unit.PercentHeight:
-				Value.Value = numberValue / 100f * Program.OutputContainer.OutputHeight;
-				break;
-			case Unit.PercentWidth:
-				Value.Value = numberValue / 100f * Program.OutputContainer.OutputWidth;
-				break;
-		}
-		
+		Value = new TVec2(new Vector2(_x.Value.Value, _y.Value.Value));
 		OnChange?.Invoke(Value);
 	}
 
-	public override TFloat GetValue()
+	public override TVec2 GetValue()
 	{
 		if (InputPort != null && InputPort.IsConnected())
 		{
 			//return the first value, since only one connection should exist.
 			foreach (var nodeProperty in InputPort.PropertiesFrom())
 			{
-				if (nodeProperty is NodeProperty<TFloat> nodeProp)
+				if (nodeProperty is NodeProperty<TVec2> nodeProp)
 				{
 					return nodeProp.GetValue();
 				}
