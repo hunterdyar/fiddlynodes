@@ -12,6 +12,7 @@ public class GridCanvas : Element
 	private ElementContainer _gridTransform;
 	public WireManager WireManager => _wireManager;
 	private WireManager _wireManager;
+	private readonly List<Node> _allNodes = new List<Node>();
 	public GridCanvas(int x, int y, int width, int height) : base(x, y, width, height)
 	{
 		_wireManager = new WireManager();
@@ -22,9 +23,28 @@ public class GridCanvas : Element
 		_gridTransform.Transform.SetPassthrough(true);
 		AddChild(_gridTransform);
 	}
+
+	public List<Node> GetAllNodes() => _allNodes;
+
+	public void AddNode(Node node)
+	{
+		_allNodes.Add(node);
+		AddChild(node);
+	}
+
+	public void RemoveNode(Node node)
+	{
+		if(_allNodes.Contains(node))
+		{
+			_allNodes.Remove(node);
+		}
+
+		Transform.RemoveChild(node.Transform);
+	}
 	
 	public override void AddChild(Element element)
 	{
+		
 		if (element == _gridTransform)
 		{
 			base.AddChild(element);
@@ -132,4 +152,5 @@ public class GridCanvas : Element
 	}
 
 
+	
 }

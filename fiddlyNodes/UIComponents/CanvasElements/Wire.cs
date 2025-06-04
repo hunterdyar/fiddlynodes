@@ -5,6 +5,7 @@ using Raylib_cs;
 
 namespace fiddlyNodes;
 
+[Serializable]
 public class Wire(Port from, Port to, WireManager manager) : IHoverable, IEquatable<Wire>
 {
 	private readonly WireManager _manager = manager;

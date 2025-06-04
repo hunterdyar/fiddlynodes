@@ -5,6 +5,7 @@ using Raylib_cs;
 
 namespace fiddlyNodes.NodeElements;
 
+[Serializable]
 public class Port : Element
 {
 	private PortPosition _portPosition;

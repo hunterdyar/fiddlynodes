@@ -202,4 +202,11 @@ public class WireManager
 
 		return false;
 	}
+
+	public List<Wire> GetAllWires()
+	{
+		return (from sets in _outgoingWires.Values
+			from item in sets
+			select item).ToList();
+	}
 }

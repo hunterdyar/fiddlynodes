@@ -10,10 +10,13 @@ public class Program
 	
 	public readonly static CommandSystem Commands = new CommandSystem();
 	public readonly static InputManager Input = new InputManager();
+	public readonly static SaveManager SaveManager = new SaveManager();
+	
 	public readonly static Element Hierarchy = new ElementContainer(0,0,640,480);
 	public static OutputContainer OutputContainer;
 	public static RectTransform Root => Hierarchy.Transform;
 	public static OutputNode PrimaryOutputNode;
+	public static GridCanvas GridCanvas;
 	
 	private static int width = 800;
 	private static int height = 600;
@@ -24,18 +27,19 @@ public class Program
 
 		int canvasWidth = (int)(width * .7f);
 		int outputWidth = width - canvasWidth;
-		var gridCanvas = new GridCanvas(0,0,canvasWidth,height);
+		GridCanvas = new GridCanvas(0,0,canvasWidth,height);
 		OutputContainer = new OutputContainer(canvasWidth,0,outputWidth,outputWidth);
-		Hierarchy.AddChild(gridCanvas);
+		Hierarchy.AddChild(GridCanvas);
 		Hierarchy.AddChild(OutputContainer);
 		
 		//test data
-		PrimaryOutputNode = new OutputNode(300, 100, 20, 20, gridCanvas);
-		var node2 = new FloatNode(40, 20, 30, 30, gridCanvas);
-		var v = new Vec2Node(80, 40, 30, 30, gridCanvas);
-		var t = new TranslateNode(500,500, 30, 30, gridCanvas);
-
-		var node3 = new CircleNode(40, 60, 20, 20, gridCanvas);
+		PrimaryOutputNode = new OutputNode(300, 100, 20, 20, GridCanvas);
+		var node2 = new FloatNode(40, 20, 30, 30, GridCanvas);
+		var v = new Vec2Node(80, 40, 30, 30, GridCanvas);
+		var t = new TranslateNode(500,500, 30, 30, GridCanvas);
+		var node3 = new CircleNode(40, 60, 20, 20, GridCanvas);
+		
+		
 		while (!Raylib.WindowShouldClose())
 		{
 			//first do inputs and controls.
@@ -54,6 +58,11 @@ public class Program
 			if (Raylib.IsWindowResized())
 			{
 				Hierarchy.Transform.Size = new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
+			}
+
+			if (Raylib.GetKeyPressed() == (int)KeyboardKey.S)
+			{
+				SaveManager.Save();
 			}
 		}
 	}

@@ -20,7 +20,7 @@ public class Node : GridCanvasElement
 		int minWidth = _title.Length * Raylib.GetFontDefault().BaseSize;//baseSize is height not width but... whatever shh.
 		_transform.SetSize(float.Max(width, minWidth),height);
 		_grid = grid;
-		grid.AddChild(this);
+		grid.AddNode(this);
 	}
 
 	public void AddProperties(params NodeProperty[] properties)
