@@ -45,10 +45,16 @@ public class SDFInputProperty : NodeProperty<TSDF>
 		int propCount = 0;
 		foreach (var property in InputPort.PropertiesFrom())
 		{
-			if (property is NodeProperty<TSDFOperation> opProp)
+			if (property is NodeProperty<TSDF> sdfin)
 			{
-				sdf.AddOperation(opProp.GetValue().Value);
-				propCount++;
+				//todo: this should be a min
+				return sdfin.GetValue();
+				// var op = sdfin.GetValue().Leaf;
+				// if (op != null)
+				// {
+				// 	sdf.AddOperation(op);
+				// 	propCount++;
+				// }
 			}
 		}
 

@@ -7,8 +7,18 @@ public class TSDF : TreeBaseObject
 	public TColor Color = new TColor(Raylib_cs.Color.Black);
 	public override ThistleType TType => ThistleType.tsdf;
 
+	public SDFOperationBase? Leaf => _leaf;
 	private SDFOperationBase? _leaf;
 
+	public TSDF()
+	{
+		
+	}
+
+	public TSDF(SDFOperationBase leaf)
+	{
+		_leaf = leaf;
+	}
 	public void AddOperation(SDFOperationBase operation)
 	{
 		//todo: test if we need to to clone for when inside of loops... once we have loops

@@ -1,10 +1,12 @@
-﻿namespace fiddlyNodes.Thistle.Library;
+﻿using System.Numerics;
+
+namespace fiddlyNodes.Thistle.Library;
 
 
 public class Translate : SDFOperationBase
 {
-	private readonly float _x;
-	private readonly float _y;
+	private float _x;
+	private float _y;
 
 	public Translate(float x, float y)
 	{
@@ -29,5 +31,17 @@ public class Translate : SDFOperationBase
 			Parent = Parent
 		};
 		return t;
+	}
+
+	public void SetOffset(Vector2 valueValue)
+	{
+		_x = valueValue.X;
+		_y = valueValue.Y;
+	}
+
+	public void SetOffset(float x, float y)
+	{
+		_x = x;
+		_y = y;
 	}
 }

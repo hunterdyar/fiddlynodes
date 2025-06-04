@@ -49,7 +49,8 @@ public abstract class NodeProperty : Element
 		if (InputPort != null)
 		{
 			InputPort.Draw();
-		}else if (OutputPort != null)
+		}
+		if (OutputPort != null)
 		{
 			OutputPort.Draw();
 		}

@@ -33,6 +33,7 @@ public class Program
 		PrimaryOutputNode = new OutputNode(300, 100, 20, 20, gridCanvas);
 		var node2 = new FloatNode(40, 20, 30, 30, gridCanvas);
 		var v = new Vec2Node(80, 40, 30, 30, gridCanvas);
+		var t = new TranslateNode(500,500, 30, 30, gridCanvas);
 
 		var node3 = new CircleNode(40, 60, 20, 20, gridCanvas);
 		while (!Raylib.WindowShouldClose())

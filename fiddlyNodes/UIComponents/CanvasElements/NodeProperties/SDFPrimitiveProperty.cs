@@ -5,10 +5,8 @@ using Raylib_cs;
 
 namespace fiddlyNodes.NodeElements;
 
-public class SDFConstantProperty : NodeProperty<TSDFOperation>
+public abstract class SDFConstantProperty : NodeProperty<TSDF>
 {
-	public SDFOperationBase Operation => _operation;
-	public SDFOperationBase _operation;
 	private Label _label;
 	public SDFConstantProperty(string propertyName, Node node) : base(propertyName, node)
 	{
@@ -24,9 +22,9 @@ public class SDFConstantProperty : NodeProperty<TSDFOperation>
 		base.Recalculate();
 	}
 
-	public override TSDFOperation GetValue()
+	public override TSDF GetValue()
 	{
-		return new TSDFOperation(_operation);
+		throw new NotImplementedException();
 	}
 
 	public override void Draw()

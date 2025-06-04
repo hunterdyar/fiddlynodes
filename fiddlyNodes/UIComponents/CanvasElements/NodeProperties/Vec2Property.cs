@@ -29,7 +29,12 @@ public class Vec2Property : NodeProperty<TVec2>
 		_unit.OnChange += (value) => OnValuesChange();
 		
 		MinWidth = propertyName.Length * Raylib.GetFontDefault().BaseSize;
-		AddAndSetPort(new Port(this, inputOrOutput));
+		
+		//get the combined vec2.
+		if (inputOrOutput == PortPosition.Output)
+		{
+			AddAndSetPort(new Port(this, inputOrOutput));
+		}
 
 		Value = new TVec2(Vector2.Zero);
 		// _x.SetValue("0", true);

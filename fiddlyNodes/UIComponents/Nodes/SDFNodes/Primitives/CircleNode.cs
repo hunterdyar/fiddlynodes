@@ -5,7 +5,7 @@ namespace fiddlyNodes.Nodes;
 
 public class CircleNode : Node
 {
-	private SDFConstantProperty sdfOutputProp;
+	private SDFCircleProperty sdfCircleProperty;
 	private NumberProperty _radiusProp;
 	public CircleNode(int x, int y, int width, int height, GridCanvas grid) : base(x, y, width, height, grid)
 	{
@@ -15,24 +15,18 @@ public class CircleNode : Node
 		
 		_radiusProp.OnChange += (value) =>
 		{
-			if (sdfOutputProp._operation is Circle circle)
-			{
-				circle.SetRadius(value.Value);
-			}
-		};
-		
-		sdfOutputProp = new SDFCircleProperty("SDF", _radiusProp, this)
-		{
-			_operation = new Circle(100),
+			sdfCircleProperty.Op.SetRadius(value.Value);
 		};
 
-		AddProperties(sdfOutputProp, _radiusProp);
+		sdfCircleProperty = new SDFCircleProperty("SDF", _radiusProp, this);
+
+		AddProperties(sdfCircleProperty, _radiusProp);
 	}
 	
 	public override void Draw()
 	{
 		base.Draw();
-		sdfOutputProp.Draw();
+		sdfCircleProperty.Draw();
 		_radiusProp.Draw();
 	}
 }
