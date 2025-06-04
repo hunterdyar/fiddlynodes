@@ -9,34 +9,35 @@ public class Port : Element
 {
 	private PortPosition _portPosition;
 	private NodeProperty _nodeProperty;
-	private float portSize = 2;
+	private float portVerticalPosition = 0;
 	public bool IsInput => _portPosition == PortPosition.Input;
 	public bool IsOutput => _portPosition == PortPosition.Output;
 
 	private WireManager wireManager => _nodeProperty.Node.Grid.WireManager;
 	public NodeProperty Property => _nodeProperty;
 
-	public Port(NodeProperty nodeProp, PortPosition portPosition) : base(0, 0, 4, 4)
+	public Port(NodeProperty nodeProp, PortPosition portPosition, int portVPos = 0) : base(0, 0, 4, 4)
 	{
 		//being a child of another element should be enough?
 		_nodeProperty = nodeProp;
 		_portPosition = portPosition;
 		_transform.Pivot = new Vector2(0.5f, 0.5f);
+		portVerticalPosition = portVPos;
 	}
 	
 	public void Recalculate()
 	{
-		float d = _nodeProperty.Transform.Size.Y / 1.5f;
-
+		float d = UISettings.Active.PropertyBaseHeight;
+		float vPos = d*portVerticalPosition + d/2;
 		if (IsInput)
 		{
 			//this happens after base() right? :p
-			_transform.LocalPosition = new Vector2(0, _nodeProperty.Transform.Size.Y / 2);
+			_transform.LocalPosition = new Vector2(0, vPos);
 			_transform.Size = new Vector2(d, d);
 		}
 		else if (IsOutput)
 		{
-			_transform.LocalPosition = new Vector2(_nodeProperty.Transform.Size.X, _nodeProperty.Transform.Size.Y / 2);
+			_transform.LocalPosition = new Vector2(_nodeProperty.Transform.Size.X, vPos);
 			_transform.Size = new Vector2(d, d);
 		}
 	}

@@ -23,7 +23,7 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 		_unit = new UnitField(0, 0, 20, 20);
 		_unit.OnChange += (value) => OnValuesChange();
 		MinWidth = propertyName.Length * Raylib.GetFontDefault().BaseSize;
-		AddAndSetPort(new Port(this, inputOrOutput));
+		AddAndSetPort(new Port(this, inputOrOutput, 1));
 		Value = new TFloat(0);
 		_number.SetValue("0", true);
 		

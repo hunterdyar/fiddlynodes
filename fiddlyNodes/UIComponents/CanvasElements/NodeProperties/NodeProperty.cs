@@ -25,8 +25,7 @@ public abstract class NodeProperty : Element
 		this.propertyName = propertyName;
 		MinWidth = propertyName.Length * Raylib.GetFontDefault().BaseSize;
 		_transform.ScaleWithParent = true;
-	}
-
+	} 
 
 	public virtual void Recalculate()
 	{
