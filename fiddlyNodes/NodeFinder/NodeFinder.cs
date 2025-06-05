@@ -141,7 +141,7 @@ public class NodeFinder
 	}
 	public List<NodeCreationItem> FindMatchingItems(string search, int count = 10)
 	{
-		return nodeItems.OrderBy(x => FuzzyUtility.DLDistance(search, x.Key)).Select(x => x.Value).Take(count).ToList();
+		return nodeItems.OrderBy(x => FuzzyUtility.DLDistance(search, x.Key)).Select(x => x.Value).Distinct().Take(count).ToList();
 	}
 
 	private void PopulateNodeItems()
@@ -175,24 +175,17 @@ public class NodeFinder
 			},
 			name = "Float",
 		});
-		nodeItems.Add("square", new NodeCreationItem()
-		{
-			CreateNodeFunction = () =>
-			{
-				var mp = Raylib.GetMousePosition();
-				return new SquareNode((int)mp.X, (int)mp.Y, 0, 0, Program.GridCanvas);
-			},
-			name = "Square",
-		});
 		var rectItem = new NodeCreationItem()
 		{
 			CreateNodeFunction = () =>
 			{
 				var mp = Raylib.GetMousePosition();
-				return new SquareNode((int)mp.X, (int)mp.Y, 0, 0, Program.GridCanvas);
+				return new RectNode((int)mp.X, (int)mp.Y, 0, 0, Program.GridCanvas);
 			},
 			name = "Rectangle",
 		};
+		//multiple aliases for Rect.
+		nodeItems.Add("square", rectItem);
 		nodeItems.Add("rect",rectItem);
 		nodeItems.Add("rectangle", rectItem);
 		_terms = nodeItems.Keys.ToList();

@@ -48,4 +48,14 @@ public class Rect : SDFOperationBase
 		_width = width;
 		_height = height;
 	}
+
+	public void SetHeight(float value)
+	{
+		_height = value;
+	}
+
+	public void SetWidth(float value)
+	{
+		_width = value;
+	}
 }
