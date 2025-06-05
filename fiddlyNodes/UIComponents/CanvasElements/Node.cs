@@ -88,9 +88,7 @@ public class Node : GridCanvasElement
 				var moveCommand = new MoveNodesCommand(this, _dragStartPosition, _transform.LocalPosition);
 				Program.Commands.AddAndExecute(moveCommand);
 			}
-		}
-
-		if (inputEvent is { Type: InputEventType.MouseLeftDown, Position: not null})
+		}else if (inputEvent is { Type: InputEventType.MouseLeftDown, Position: not null})
 		{
 			if (_transform.ContainsPoint(inputEvent.Position.Value))
 			{
@@ -114,14 +112,29 @@ public class Node : GridCanvasElement
 				_transform.Translate(inputEvent.Delta.Value);
 				//inputEvent.Handle();
 			}
-		}
-
-		if (inputEvent is { Type: InputEventType.Hover})
+		}else if (inputEvent is { Type: InputEventType.Hover})
 		{
 			inputEvent.Manager.RequestHover(this);
 			inputEvent.Handle();
+		}else if (inputEvent is { Type: InputEventType.KeyPress })
+		{
+			if (_focused && !_dragging)
+			{
+				if (inputEvent.KeyboardKey == KeyboardKey.Backspace || inputEvent.KeyboardKey == KeyboardKey.Delete)
+				{
+					inputEvent.Manager.ClearFocus();
+					Delete();
+				}
+			}
 		}
 	}
-	
-	
+
+	private void Delete()
+	{
+		foreach (NodeProperty nodeProperty in _nodeProperties)
+		{
+			nodeProperty.ClearAllConnections();
+		}
+		_grid.RemoveNode(this);
+	}
 }

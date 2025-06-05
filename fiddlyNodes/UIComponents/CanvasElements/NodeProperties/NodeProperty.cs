@@ -93,6 +93,18 @@ public abstract class NodeProperty : Element
 	{
 		return true;
 	}
+
+	public void ClearAllConnections()
+	{
+		//todo: return commands for the command system.
+		if (InputPort != null)
+		{
+			_node.Grid.WireManager.ClearWires(InputPort);
+		}else if (OutputPort != null)
+		{
+			_node.Grid.WireManager.ClearWires(OutputPort);
+		}
+	}
 }
 
 public abstract class NodeProperty<T> : NodeProperty where T : TreeBaseObject

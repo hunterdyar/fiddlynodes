@@ -39,7 +39,7 @@ public class GridCanvas : Element
 			_allNodes.Remove(node);
 		}
 
-		Transform.RemoveChild(node.Transform);
+		_gridTransform.Transform.RemoveChild(node.Transform);
 	}
 	
 	public override void AddChild(Element element)

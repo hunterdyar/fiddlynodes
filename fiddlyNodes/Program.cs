@@ -11,6 +11,7 @@ public class Program
 	public readonly static CommandSystem Commands = new CommandSystem();
 	public readonly static InputManager Input = new InputManager();
 	public readonly static SaveManager SaveManager = new SaveManager();
+	public readonly static NodeFinder NodeFinder = new NodeFinder();
 	
 	public readonly static Element Hierarchy = new ElementContainer(0,0,640,480);
 	public static OutputContainer OutputContainer;
@@ -46,11 +47,11 @@ public class Program
 			Input.Tick();
 			Raylib.ClearBackground(Color.RayWhite);
 			
-			
 			//draw.
 			Raylib.BeginDrawing();
 			Hierarchy.Draw();
 			Input.Draw();
+			NodeFinder.Draw();
 			
 			Input.DebugDraw();
 			Raylib.EndDrawing();
@@ -58,11 +59,6 @@ public class Program
 			if (Raylib.IsWindowResized())
 			{
 				Hierarchy.Transform.Size = new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
-			}
-
-			if (Raylib.GetKeyPressed() == (int)KeyboardKey.S)
-			{
-				SaveManager.Save();
 			}
 		}
 	}

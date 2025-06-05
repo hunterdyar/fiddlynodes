@@ -178,6 +178,7 @@ public class InputManager
 
 	private void PropagateKeyboardInput(InputEvent inputEvent)
 	{
+		Program.NodeFinder.OnInput(ref inputEvent);
 		if (!inputEvent.Handled)
 		{
 			if (_hasFocus != null)
@@ -218,6 +219,13 @@ public class InputManager
 	
 	private void PropagateInputToFocusedUnderMouse(InputEvent inputEvent)
 	{
+		//node finder is keyboard only right now. uncomment this later.
+		// Program.NodeFinder.OnInput(ref inputEvent);
+		// if (inputEvent.Handled)
+		// {
+		// 	return;
+		// }
+		
 		if (_hasFocus != null)
 		{
 			_hasFocus.OnInput(ref inputEvent);
