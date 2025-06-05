@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Reflection;
 using Raylib_cs;
 
 namespace fiddlyNodes;
@@ -27,5 +28,18 @@ public static class ElementUtility
 		var num = float.Abs((b.Y - a.Y) * pos.X - (b.X - a.X) * pos.Y + b.X * a.Y - b.Y * a.X);
 		var denum = float.Sqrt(float.Pow(b.Y-a.Y,2) + float.Pow(b.X-a.X,2));
 		return num / denum;
+	}
+
+	public static IEnumerable<Type> GetNodeTypes()
+	{
+		List<Type> nodetypes = new List<Type>();
+		foreach (Type type in Assembly.GetAssembly(typeof(Node)).GetTypes()
+			         .Where(myType => myType.IsClass
+		                          && !myType.IsAbstract
+		                          && myType.IsSubclassOf(typeof(Node)))){
+			nodetypes.Add(type);
+		}
+
+		return nodetypes;
 	}
 }

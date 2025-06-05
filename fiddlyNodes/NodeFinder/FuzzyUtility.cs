@@ -17,9 +17,16 @@ public static class FuzzyUtility
 		{
 			return len_orig == 0 ? len_diff : len_orig;
 		}
-
+		
+		int extraWeight = 0;
+		if (original == modified.Substring(0,int.Min(modified.Length-1,original.Length-1)))
+		{
+			//reward for matching the first part of the string. Helps for the right things to appear while typing.
+			extraWeight -= 5;
+		}
+		
 		var matrix = new int[len_orig + 1, len_diff + 1];
-
+		
 		for (int i = 1; i <= len_orig; i++) {
 			matrix[i, 0] = i;
 			for (int j = 1; j <= len_diff; j++) {
@@ -37,7 +44,7 @@ public static class FuzzyUtility
 					matrix[i,j] = Math.Min (matrix[i,j], matrix[i - 2, j - 2] + cost);
 			}
 		}
-		return matrix[len_orig, len_diff];
+		return matrix[len_orig, len_diff] + extraWeight;
 	}
 	
 }

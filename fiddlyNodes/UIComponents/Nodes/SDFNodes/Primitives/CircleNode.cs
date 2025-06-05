@@ -7,7 +7,7 @@ public class CircleNode : Node
 {
 	private SDFCircleProperty sdfCircleProperty;
 	private NumberProperty _radiusProp;
-	public CircleNode(int x, int y, int width, int height, GridCanvas grid) : base(x, y, width, height, grid)
+	public CircleNode(int x, int y, GridCanvas grid) : base(x, y, 0, 0, grid)
 	{
 		_title = "Circle";
 		
@@ -22,7 +22,10 @@ public class CircleNode : Node
 
 		AddProperties(sdfCircleProperty, _radiusProp);
 	}
-	
+
+	public new static string DisplayName => "Circle";
+	public new static string[] Aliases => ["circle", "ellipse"];
+
 	public override void Draw()
 	{
 		base.Draw();

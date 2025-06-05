@@ -23,4 +23,7 @@ public class StrokeNode : Node
 
 		AddProperties(_passthrough, _stroke);
 	}
+
+	public new static string DisplayName => "Stroke";
+	public new static string[] Aliases => ["stroke", "outline", "border"];
 }

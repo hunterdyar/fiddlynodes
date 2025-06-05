@@ -34,11 +34,11 @@ public class Program
 		Hierarchy.AddChild(OutputContainer);
 		
 		//test data
-		PrimaryOutputNode = new OutputNode(300, 100, 20, 20, GridCanvas);
-		var node2 = new FloatNode(40, 20, 30, 30, GridCanvas);
-		var v = new Vec2Node(80, 40, 30, 30, GridCanvas);
-		var t = new TranslateNode(500,500, 30, 30, GridCanvas);
-		var node3 = new CircleNode(40, 60, 20, 20, GridCanvas);
+		PrimaryOutputNode = new OutputNode(300, 100, GridCanvas);
+		var node2 = new FloatNode(40, 20, GridCanvas);
+		var v = new Vec2Node(80, 40,  GridCanvas);
+		var t = new TranslateNode(500,500, GridCanvas);
+		var node3 = new CircleNode(40, 60, GridCanvas);
 		
 		
 		while (!Raylib.WindowShouldClose())

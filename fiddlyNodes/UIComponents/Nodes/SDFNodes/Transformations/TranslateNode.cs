@@ -8,7 +8,7 @@ public class TranslateNode : Node
 	private Vec2Property _vec2;
 	private SDFPassthroughProperty _passthrough;
 	private Translate _operation;
-	public TranslateNode(int x, int y, int width, int height, GridCanvas grid) : base(x, y, width, height, grid)
+	public TranslateNode(int x, int y, GridCanvas grid) : base(x, y, 0, 0, grid)
 	{
 		_title = "Translate";
 
@@ -25,4 +25,7 @@ public class TranslateNode : Node
 
 		AddProperties(_passthrough, _vec2);
 	}
+
+	public new static string DisplayName => "Translate";
+	public new static string[] Aliases => ["translate", "move"];
 }

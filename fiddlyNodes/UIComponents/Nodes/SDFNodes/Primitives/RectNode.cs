@@ -8,7 +8,7 @@ public class RectNode : Node
 	private SDFRectProperty _sdfRectProperty;
 	private NumberProperty _widthProp;
 	private NumberProperty _heightProp;
-	public RectNode(int x, int y, int width, int height, GridCanvas grid) : base(x, y, width, height, grid)
+	public RectNode(int x, int y, GridCanvas grid) : base(x, y, 0, 0, grid)
 	{
 		_title = "Square";
 
@@ -22,7 +22,10 @@ public class RectNode : Node
 
 		AddProperties(_sdfRectProperty, _widthProp, _heightProp);
 	}
-	
+
+	public new static string DisplayName => "Rectangle";
+	public new static string[] Aliases => ["rect", "rectangle", "box", "square"];
+
 	public override void Draw()
 	{
 		base.Draw();

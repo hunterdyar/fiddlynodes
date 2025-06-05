@@ -5,8 +5,11 @@ using Raylib_cs;
 
 namespace fiddlyNodes;
 
-public class Node : GridCanvasElement
+public abstract class Node : GridCanvasElement
 {
+	public static string DisplayName { get; }
+	public static string[] Aliases { get; }
+	
 	private bool _dragging = false;
 	protected string _title;
 	private List<NodeProperty> _nodeProperties = new List<NodeProperty>();

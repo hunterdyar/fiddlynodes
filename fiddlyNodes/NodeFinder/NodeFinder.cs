@@ -1,7 +1,10 @@
-﻿using System.Security.AccessControl;
+﻿using System.Diagnostics;
+using System.Numerics;
+using System.Security.AccessControl;
 using fiddlyNodes.Nodes;
 using fiddlyNodes.Thistle.Library;
 using Raylib_cs;
+using BindingFlags = System.Reflection.BindingFlags;
 
 namespace fiddlyNodes;
 
@@ -146,62 +149,58 @@ public class NodeFinder
 
 	private void PopulateNodeItems()
 	{
-		nodeItems.Add("circle", new NodeCreationItem()
-		{
-			//todo: There is probably a clever way to make this func with generics and some <T>.
-			//Probably related to a 'builder' or 'factory' pattern.
-			CreateNodeFunction = () =>
-			{
-				var mp = Raylib.GetMousePosition();
-				return new CircleNode((int)mp.X, (int)mp.Y, 0, 0, Program.GridCanvas);
-			},
-			name = "Circle",
-		});
-		nodeItems.Add("translate", new NodeCreationItem()
-		{
-			CreateNodeFunction = () =>
-			{
-				var mp = Raylib.GetMousePosition();
-				return new TranslateNode((int)mp.X, (int)mp.Y, 0, 0, Program.GridCanvas);
-			},
-			name = "Translate",
-		});
-		nodeItems.Add("float", new NodeCreationItem()
-		{
-			CreateNodeFunction = () =>
-			{
-				var mp = Raylib.GetMousePosition();
-				return new FloatNode((int)mp.X, (int)mp.Y, 0, 0, Program.GridCanvas);
-			},
-			name = "Float",
-		});
-		var rectItem = new NodeCreationItem()
-		{
-			CreateNodeFunction = () =>
-			{
-				var mp = Raylib.GetMousePosition();
-				return new RectNode((int)mp.X, (int)mp.Y, 0, 0, Program.GridCanvas);
-			},
-			name = "Rectangle",
-		};
-		//multiple aliases for Rect.
-		nodeItems.Add("square", rectItem);
-		nodeItems.Add("rect",rectItem);
-		nodeItems.Add("rectangle", rectItem);
-
-		nodeItems.Add("stroke", new NodeCreationItem()
-		{
-			CreateNodeFunction = () =>
-			{
-				var mp = Raylib.GetMousePosition();
-				return new StrokeNode((int)mp.X, (int)mp.Y, Program.GridCanvas);
-			},
-			name = "Stroke",
-		});
+		nodeItems.Clear();
 		
+		Type node = typeof(Node);
+		var nodeTypes = ElementUtility.GetNodeTypes();
+		foreach (var nodeType in nodeTypes)
+		{
+			var displayNameP = nodeType.GetProperty("DisplayName", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+			if(displayNameP == null)
+			{continue;}
+			var dnm = displayNameP?.GetValue(null, null);
+
+			if (dnm is not string displayName)
+			{
+				Debug.WriteLine($"NodeFinder: Node {nodeType.FullName} has no displayName, skipping.");
+				continue;
+			}
+
+			var aliasP = nodeType.GetProperty("Aliases", BindingFlags.FlattenHierarchy | BindingFlags.Static | BindingFlags.Public);
+			var aliases = aliasP.GetMethod.Invoke(null,null) as string[];
+
+			if (aliases == null)
+			{
+				Debug.WriteLine($"NodeFinder: Node {displayName} has no aliases, skipping.");
+				continue;
+			}
+			//create one NodeCreationItem per type. 
+			var nci = new NodeCreationItem()
+			{
+				CreateNodeFunction = () =>
+				{
+					var mp = Raylib.GetMousePosition();
+					return NodeFactory.CreateNode(nodeType, mp, Program.GridCanvas);
+				},
+				name = displayName.ToString()
+			};
+				
+			for (int i = 0; i < aliases.Length; i++)
+			{
+				var alias = aliases.GetValue(i).ToString();
+				if (alias != null)
+				{
+					//same nci for each alias will ensure Distinct() works as intended.
+					nodeItems.Add(alias, nci);
+				}
+			}
+			
+		}
 		_terms = nodeItems.Keys.ToList();
 	}
-	
+
+
+
 	#endregion
 	
 }
