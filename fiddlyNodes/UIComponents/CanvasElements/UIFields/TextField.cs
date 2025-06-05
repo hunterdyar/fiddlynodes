@@ -12,6 +12,12 @@ public class TextField : Element, IChangeReporter<TString>
 	public TextField(int x, int y, int width, int height) : base(x, y, width, height)
 	{
 		_text = new TextInputHandler(IsValidInputCharacter);
+		_text.OnChange += ChangeHandler;
+	}
+
+	private void ChangeHandler(string s)
+	{
+		 OnChange?.Invoke(new TString(s));
 	}
 
 	public override void Draw()

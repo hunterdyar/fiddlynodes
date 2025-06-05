@@ -175,6 +175,26 @@ public class NodeFinder
 			},
 			name = "Float",
 		});
+		nodeItems.Add("square", new NodeCreationItem()
+		{
+			CreateNodeFunction = () =>
+			{
+				var mp = Raylib.GetMousePosition();
+				return new SquareNode((int)mp.X, (int)mp.Y, 0, 0, Program.GridCanvas);
+			},
+			name = "Square",
+		});
+		var rectItem = new NodeCreationItem()
+		{
+			CreateNodeFunction = () =>
+			{
+				var mp = Raylib.GetMousePosition();
+				return new SquareNode((int)mp.X, (int)mp.Y, 0, 0, Program.GridCanvas);
+			},
+			name = "Rectangle",
+		};
+		nodeItems.Add("rect",rectItem);
+		nodeItems.Add("rectangle", rectItem);
 		_terms = nodeItems.Keys.ToList();
 	}
 	

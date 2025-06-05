@@ -1,4 +1,6 @@
-﻿namespace fiddlyNodes;
+﻿using fiddlyNodes.Thistle.Library;
+
+namespace fiddlyNodes;
 
 public class NumberField : TextField
 {
@@ -12,6 +14,12 @@ public class NumberField : TextField
 		this.maxValue = maxValue;
 		this.minValue = minValue;
 		_text = new TextInputHandler(IsValidNumberInputCharacter);
+		_text.OnChange += ChangeHandler;
+	}
+
+	private void ChangeHandler(string s)
+	{
+		OnChange?.Invoke(new TString(s));
 	}
 
 	protected bool IsValidNumberInputCharacter(char c)

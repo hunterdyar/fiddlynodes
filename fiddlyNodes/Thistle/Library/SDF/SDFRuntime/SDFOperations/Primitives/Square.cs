@@ -36,4 +36,16 @@ public class Rect : SDFOperationBase
 			Parent = Parent
 		};
 	}
+
+	public void SetSize(float size)
+	{
+		_width = size;
+		_height = size;
+	}
+
+	public void SetSize(float width, float height)
+	{
+		_width = width;
+		_height = height;
+	}
 }
