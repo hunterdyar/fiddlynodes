@@ -2,8 +2,8 @@
 
 public class Mirror : SDFOperationBase
 {
-	private readonly float _around;
-	private readonly bool _horizontal;
+	private float _around;
+	private bool _horizontal;
 	// todo: control if it's the positive or negative side mirroring to the other;
 	public Mirror(float around, bool horizontal)
 	{
@@ -31,5 +31,15 @@ public class Mirror : SDFOperationBase
 		{
 			Parent = Parent
 		};
+	}
+
+	public void SetAround(float value)
+	{
+		_around = value;
+	}
+
+	public void SetIsHorizontal(bool value)
+	{
+		_horizontal = value;
 	}
 }
