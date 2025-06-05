@@ -8,7 +8,6 @@ public class TextField : Element, IChangeReporter<TString>
 	public string TextValue => _text.Value;
 	protected TextInputHandler _text;
 	public Action<TString> OnChange { get; set; }
-
 	
 	public TextField(int x, int y, int width, int height) : base(x, y, width, height)
 	{

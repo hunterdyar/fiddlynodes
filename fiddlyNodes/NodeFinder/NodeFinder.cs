@@ -55,6 +55,17 @@ public class NodeFinder
 		}
 	}
 
+	private void OpenWindow()
+	{
+		_showWindow = true;
+	}
+	private void CloseWindow()
+	{
+		_showWindow = false;
+		//close but don't fire change event. This way, when you open nodefinder again, it has the previous items selected until you start typing.
+		_text.SetValue(string.Empty,true);
+	}
+
 	public void OnInput(ref InputEvent inputEvent)
 	{
 		if (inputEvent.Type != InputEventType.KeyPress)
@@ -66,7 +77,7 @@ public class NodeFinder
 		{
 			if (inputEvent.KeyboardKey == KeyboardKey.Tab)
 			{
-				_showWindow = true;
+				OpenWindow();
 				inputEvent.Handle();
 				return;
 			}
@@ -83,11 +94,11 @@ public class NodeFinder
 					var selected = _searchItems[_selectedIndex];
 					selected.CreateNodeFunction.Invoke();
 				}
-				_showWindow = false;
+				CloseWindow();
 				inputEvent.Handle();
 			}else if (inputEvent.KeyboardKey == KeyboardKey.Escape || inputEvent.KeyboardKey == KeyboardKey.Tab)
 			{
-				_showWindow = false;
+				CloseWindow();
 				inputEvent.Handle();
 			}else if (inputEvent.KeyboardKey == KeyboardKey.Up)
 			{

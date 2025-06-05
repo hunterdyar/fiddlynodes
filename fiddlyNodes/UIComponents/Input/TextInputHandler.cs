@@ -22,7 +22,27 @@ public class TextInputHandler
 	{
 		_isValid = isValid;
 	}
-	
+
+	private void Backspace(bool withControl = false, bool immediate = false)
+	{
+		bool changed = false;
+
+		int removeCount = !withControl ? 1 : _cursorPosition;
+		
+		while(removeCount > 0 && _value.Length > 0)
+		{
+			_value = _value.Remove(_cursorPosition - 1, 1);
+			_cursorPosition--;
+			changed = true;
+			removeCount--;
+		}
+
+		if (!immediate && changed)
+		{
+			OnChange?.Invoke(_value);
+		}
+		
+	}
 	public void OnInput(ref InputEvent inputEvent)
 	{
 		if (inputEvent.Type == InputEventType.KeyPress)
@@ -31,13 +51,8 @@ public class TextInputHandler
 			var c = inputEvent.Character.Value;
 			if (k == KeyboardKey.Backspace)
 			{
-				if (_cursorPosition > 0 && _value.Length > 0)
-				{
-					_value = _value.Remove(_cursorPosition - 1, 1);
-					_cursorPosition--;
-					OnChange?.Invoke(_value);
-				}
-
+				bool ctrl = Raylib.IsKeyDown(KeyboardKey.LeftControl) || Raylib.IsKeyDown(KeyboardKey.RightControl);
+				Backspace(ctrl, false);
 				inputEvent.Handle();
 			}
 			else if (k == KeyboardKey.Left)
