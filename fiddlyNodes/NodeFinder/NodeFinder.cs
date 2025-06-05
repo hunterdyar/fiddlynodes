@@ -188,6 +188,17 @@ public class NodeFinder
 		nodeItems.Add("square", rectItem);
 		nodeItems.Add("rect",rectItem);
 		nodeItems.Add("rectangle", rectItem);
+
+		nodeItems.Add("stroke", new NodeCreationItem()
+		{
+			CreateNodeFunction = () =>
+			{
+				var mp = Raylib.GetMousePosition();
+				return new StrokeNode((int)mp.X, (int)mp.Y, Program.GridCanvas);
+			},
+			name = "Stroke",
+		});
+		
 		_terms = nodeItems.Keys.ToList();
 	}
 	

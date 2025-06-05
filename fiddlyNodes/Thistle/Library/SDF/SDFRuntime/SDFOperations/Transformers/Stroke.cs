@@ -2,8 +2,8 @@
 
 public class Stroke : SDFOperationBase
 {
-	private readonly float _width;
-	private readonly float _radius;
+	private float _width;
+	private float _radius;
 	
 	public Stroke(float width) : base(null)
 	{
@@ -23,5 +23,11 @@ public class Stroke : SDFOperationBase
 			Parent = this.Parent
 		};
 		return s;
+	}
+
+	public void SetWidth(float width)
+	{
+		_width = width;
+		_radius = width / 2f;
 	}
 }
