@@ -86,7 +86,7 @@ public class Vec2Property : NodeProperty<TVec2>
 		Value = new TVec2(new Vector2(_x.Value.Value, _y.Value.Value));
 		OnChange?.Invoke(Value);
 	}
-
+	
 	public override TVec2 GetValue()
 	{
 		if (InputPort != null && InputPort.IsConnected())

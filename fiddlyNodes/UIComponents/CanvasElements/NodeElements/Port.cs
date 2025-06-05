@@ -51,6 +51,21 @@ public class Port : Element
 		base.Draw();
 	}
 
+	public string GetPathID()
+	{
+		if (IsInput)
+		{
+			return _nodeProperty.GetPath() + "/in";
+		}
+		
+		if (IsOutput)
+		{
+			return _nodeProperty.GetPath() + "/out";
+		}
+
+		throw new NotImplementedException();
+	}
+
 	public override void OnInput(ref InputEvent inputEvent)
 	{
 		if (inputEvent is { Type: InputEventType.MouseLeftDown, Position: not null })

@@ -11,6 +11,7 @@ public abstract class NodeProperty : Element
 	protected Port? InputPort;
 	private Port? OutputPort;
 	public int MinWidth;
+	public string PropertyName => propertyName;
 	protected string propertyName;
 	public Node Node => _node;
 	private Node _node;
@@ -104,6 +105,11 @@ public abstract class NodeProperty : Element
 		{
 			_node.Grid.WireManager.ClearWires(OutputPort);
 		}
+	}
+
+	public string GetPath()
+	{
+		return _node.UID+"/"+propertyName;
 	}
 }
 

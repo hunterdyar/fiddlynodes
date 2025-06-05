@@ -155,23 +155,11 @@ public class NodeFinder
 		var nodeTypes = ElementUtility.GetNodeTypes();
 		foreach (var nodeType in nodeTypes)
 		{
-			var displayNameP = nodeType.GetProperty("DisplayName", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
-			if(displayNameP == null)
-			{continue;}
-			var dnm = displayNameP?.GetValue(null, null);
+			var displayName = NodeFactory.GetNodeDisplayNameFromType(nodeType);
+			var aliases = NodeFactory.GetNodeAliasesFromType(nodeType);
 
-			if (dnm is not string displayName)
+			if (aliases.Length == 0)
 			{
-				Debug.WriteLine($"NodeFinder: Node {nodeType.FullName} has no displayName, skipping.");
-				continue;
-			}
-
-			var aliasP = nodeType.GetProperty("Aliases", BindingFlags.FlattenHierarchy | BindingFlags.Static | BindingFlags.Public);
-			var aliases = aliasP.GetMethod.Invoke(null,null) as string[];
-
-			if (aliases == null)
-			{
-				Debug.WriteLine($"NodeFinder: Node {displayName} has no aliases, skipping.");
 				continue;
 			}
 			//create one NodeCreationItem per type. 
@@ -184,7 +172,7 @@ public class NodeFinder
 				},
 				name = displayName.ToString()
 			};
-				
+			//add node creation item to all aliases.
 			for (int i = 0; i < aliases.Length; i++)
 			{
 				var alias = aliases.GetValue(i).ToString();
@@ -198,9 +186,7 @@ public class NodeFinder
 		}
 		_terms = nodeItems.Keys.ToList();
 	}
-
-
-
+	
 	#endregion
 	
 }

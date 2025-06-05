@@ -13,9 +13,7 @@ public class SDFCircleProperty : SDFConstantProperty
 		Radius = radiusProp;
 		_circle = new Circle(radiusProp.Value.Value);
 	}
-
 	
-
 	public override TSDF GetValue()
 	{
 		//reach out to the appropriate GetValue calls so it goes up the chain.

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections;
+using System.Numerics;
 using System.Security.Cryptography;
 using fiddlyNodes.NodeElements;
 using Raylib_cs;
@@ -9,13 +10,16 @@ public abstract class Node : GridCanvasElement
 {
 	public static string DisplayName { get; }
 	public static string[] Aliases { get; }
-	
+	public string UID => _uid;
+	private readonly string _uid;
 	private bool _dragging = false;
 	protected string _title;
+	public List<NodeProperty> Properties => _nodeProperties;
 	private List<NodeProperty> _nodeProperties = new List<NodeProperty>();
 	private float _propertyUnitPercentage;
 	private Vector2 _dragStartPosition;
 	public GridCanvas Grid => _grid;
+
 	private GridCanvas _grid;
 	public Node(int x, int y, int width, int height, GridCanvas grid) : base(x, y, width, height, grid)
 	{
@@ -24,6 +28,7 @@ public abstract class Node : GridCanvasElement
 		_transform.SetSize(float.Max(width, minWidth),height);
 		_grid = grid;
 		grid.AddNode(this);
+		_uid = NodeFactory.GetUniqueID();
 	}
 
 	public void AddProperties(params NodeProperty[] properties)

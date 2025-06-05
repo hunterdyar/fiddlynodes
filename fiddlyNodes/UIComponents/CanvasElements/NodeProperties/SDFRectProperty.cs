@@ -14,6 +14,7 @@ public class SDFRectProperty : SDFConstantProperty
 		Width = wProp;
 		Height = hProp;
 		_rect = new Rect(Width.Value.Value, Height.Value.Value);
+		propertyName = "sdfrect";
 	}
 	
 	public override TSDF GetValue()

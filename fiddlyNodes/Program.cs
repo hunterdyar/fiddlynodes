@@ -39,8 +39,9 @@ public class Program
 		var v = new Vec2Node(80, 40,  GridCanvas);
 		var t = new TranslateNode(500,500, GridCanvas);
 		var node3 = new CircleNode(40, 60, GridCanvas);
-		
-		
+		Console.WriteLine(NodeFactory.SerializeNode(v));
+		Console.WriteLine("---");
+		Console.WriteLine(NodeFactory.SerializeNode(t));
 		while (!Raylib.WindowShouldClose())
 		{
 			//first do inputs and controls.
