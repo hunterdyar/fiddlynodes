@@ -15,10 +15,11 @@ public class RectNode : Node
 		_widthProp = new NumberProperty("Width", this, PortPosition.Input);
 		_heightProp = new NumberProperty("Height", this, PortPosition.Input);
 		
+		_sdfRectProperty = new SDFRectProperty("SDF", _widthProp, _heightProp, this);
+
 		_heightProp.OnChange += (value) => { _sdfRectProperty.Op.SetHeight(value.Value); };
 		_widthProp.OnChange += (value) => { _sdfRectProperty.Op.SetWidth(value.Value); };
 
-		_sdfRectProperty = new SDFRectProperty("SDF", _widthProp, _heightProp, this);
 
 		AddProperties(_sdfRectProperty, _widthProp, _heightProp);
 	}

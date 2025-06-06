@@ -10,8 +10,13 @@ public abstract class Node : GridCanvasElement
 {
 	public static string DisplayName { get; }
 	public static string[] Aliases { get; }
-	public string UID => _uid;
-	private readonly string _uid;
+	public string UID
+	{
+		get => _uid;
+		set => _uid = value;
+	}
+
+	protected string _uid;
 	private bool _dragging = false;
 	protected string _title;
 
@@ -37,6 +42,8 @@ public abstract class Node : GridCanvasElement
 		{
 			_nodeProperties.Add(property);
 			AddChild(property);
+			var g = property.GetPath(false);
+			
 		}
 		Recalculate();
 	}
@@ -160,5 +167,21 @@ public abstract class Node : GridCanvasElement
 			nodeProperty.ClearAllConnections();
 		}
 		_grid.RemoveNode(this);
+	}
+
+	public void SetNodePropertyByPath(string path, string value)
+	{
+		var nodeProp = _nodeProperties.Find(x=>x.GetPath(false) == path);
+		if (nodeProp != null)
+		{
+			nodeProp.SetValueFromString(value);
+		}
+	}
+
+	public NodeProperty GetPropertyByPath(string subpath)
+	{
+		//todo: this isn't quite working.
+		var y = _nodeProperties.ToList();
+		return y.Find(x=>x.GetPath(false) == subpath);
 	}
 }

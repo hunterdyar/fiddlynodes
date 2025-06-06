@@ -209,4 +209,37 @@ public class WireManager
 			from item in sets
 			select item).ToList();
 	}
+
+	public void CreateWireFromData(NodeFactory.WireData wireData)
+	{
+		var path = wireData.FromPath.Trim('/').Split('/');
+		var fnode = Program.GridCanvas.GetAllNodes().Find(n => n.UID == path[0]);
+		var subpath = "";
+		for (int i = 1; i < path.Length-1; i++)
+		{
+			subpath += path[i] + (i < path.Length-2 ? "/" : "");
+		}
+		var fromProp = fnode.GetPropertyByPath(subpath);
+		if (path[^1] == "in")
+		{
+			
+		}
+
+		path = wireData.FromPath.Trim('/').Split('/');
+		var tnode = Program.GridCanvas.GetAllNodes().Find(n => n.UID == path[0]);
+		subpath = "";
+		for (int i = 1; i < path.Length - 1; i++)
+		{
+			subpath += path[i] + (i < path.Length - 1 ? "/" : "");
+		}
+
+		var toProp = tnode.GetPropertyByPath(subpath);
+		if (path[^1] == "in")
+		{
+
+		}
+		
+		
+	}
+	
 }

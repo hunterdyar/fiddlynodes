@@ -20,9 +20,9 @@ public class Vec2Property : NodeProperty<TVec2>
 	{
 		PropHeight = 5;//label, x, y.
 		_label = new Label("Vector 2", TextPosition.Center);
-		_x = new NumberProperty("X", node, PortPosition.Input);
+		_x = new NumberProperty("X", node, PortPosition.Input, this);
 		_x.OnChange += (value) => OnValuesChange();
-		_y = new NumberProperty("Y", node, PortPosition.Input);
+		_y = new NumberProperty("Y", node, PortPosition.Input, this);
 		
 		_y.OnChange += (value) => OnValuesChange();
 		_unit = new UnitField(0, 0, 20, 20);

@@ -55,4 +55,9 @@ public class StringProperty : NodeProperty<TString>
 	{
 		return Value.Value;
 	}
+
+	public override void SetValueFromString(string value)
+	{
+		Value.Value = value;
+	}
 }

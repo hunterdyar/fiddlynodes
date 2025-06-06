@@ -14,7 +14,7 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 	
 	public Action<TFloat> OnChange { get; set; }
 	
-	public NumberProperty(string propertyName, Node node, PortPosition inputOrOutput) : base(propertyName, node)
+	public NumberProperty(string propertyName, Node node, PortPosition inputOrOutput, NodeProperty parent = null) : base(propertyName, node)
 	{
 		PropHeight = 2;
 		_label = new Label(propertyName, TextPosition.Center);
@@ -26,7 +26,7 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 		AddAndSetPort(new Port(this, inputOrOutput, 1));
 		Value = new TFloat(0);
 		_number.SetValue("0", true);
-		
+		_parentProperty = parent;
 		MinWidth = 100;
 		AddChild(_unit);
 		AddChild(_number);
@@ -103,9 +103,23 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 		
 		return Value;
 	}
-
+	
+	//Used in serialization to json.
 	public override string ToString()
 	{
-		return Value.ToString();
+		//todo: unit.
+		return Value.ToString() + "_" + _unit.ToString();
+	}
+
+	public override void SetValueFromString(string value)
+	{
+		var s = value.Split('_');
+		var f = s[0];
+		var u = s[1];
+		if(float.TryParse(f, out var val))
+		{
+			Value.Value = val;
+		}
+		_unit.SetFromString(u);
 	}
 }

@@ -9,23 +9,25 @@ namespace fiddlyNodes.NodeElements;
 public abstract class NodeProperty : Element
 {
 	protected Port? InputPort;
-	private Port? OutputPort;
+	protected Port? OutputPort;
 	public int MinWidth;
 	public string PropertyName => propertyName;
 	protected string propertyName;
 	public Node Node => _node;
 	private Node _node;
+
+	protected NodeProperty _parentProperty;
 	
 	//number of prop-heights the property takes.
 	public float PropHeight = 1;
-	
-	public NodeProperty(string propertyName, Node node) : base(0, 0, 20, 12)
+	public NodeProperty(string propertyName, Node node, NodeProperty? parent = null) : base(0, 0, 20, 12)
 	{
 		_node = node;
 		///temp testing data that will be in child classes.
 		this.propertyName = propertyName;
 		MinWidth = propertyName.Length * Raylib.GetFontDefault().BaseSize;
 		_transform.ScaleWithParent = true;
+		_parentProperty = parent;
 	} 
 
 	public virtual void Recalculate()
@@ -56,7 +58,7 @@ public abstract class NodeProperty : Element
 			OutputPort.Draw();
 		}
 	}
-
+	
 	public void AddAndSetPort(Port port)
 	{
 		AddChild(port);
@@ -107,14 +109,26 @@ public abstract class NodeProperty : Element
 		}
 	}
 
-	public string GetPath()
+	public string GetPath(bool includeNode)
 	{
-		return _node.UID+"/"+propertyName;
+		if (_parentProperty == null)
+		{
+			return (includeNode ? _node.UID+"/" : "/") + propertyName;
+		}
+		else
+		{
+			return _parentProperty.GetPath(includeNode)+"/"+propertyName;
+		}
 	}
 
 	public virtual IEnumerable<NodeProperty> GetProperties()
 	{
 		yield return this;
+	}
+
+	public virtual void SetValueFromString(string value)
+	{
+		throw new NotImplementedException();
 	}
 }
 

@@ -12,6 +12,7 @@ public class OutputNode : Node
 		_title = "Output";
 		sdfProp = new SDFInputProperty("Value", this);
 		AddProperties(sdfProp);
+		_uid = "output";
 	}
 	
 	public TSDF GetValue() => sdfProp.GetValue();

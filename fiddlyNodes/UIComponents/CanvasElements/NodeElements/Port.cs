@@ -55,12 +55,12 @@ public class Port : Element
 	{
 		if (IsInput)
 		{
-			return _nodeProperty.GetPath() + "/in";
+			return _nodeProperty.GetPath(true) + "/in";
 		}
 		
 		if (IsOutput)
 		{
-			return _nodeProperty.GetPath() + "/out";
+			return _nodeProperty.GetPath(true) + "/out";
 		}
 
 		throw new NotImplementedException();

@@ -11,4 +11,23 @@ public class UnitField : OptionsField<TUnit>
 		Selected = Options[_selectedIndex];
 	}
 
+	public override string ToString()
+	{
+		return Selected.ToString();
+	}
+
+	public void SetFromString(String value)
+	{
+		for (var i = 0; i < Options.Count; i++)
+		{
+			TUnit unit = Options[i];
+			if (unit.ToString() == value)
+			{
+				_selectedIndex = i;
+				Selected = Options[_selectedIndex];
+				return;
+			}
+		}
+		throw new Exception("unable to deserialize units field.");
+	}
 }

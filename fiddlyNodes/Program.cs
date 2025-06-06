@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Numerics;
+using System.Text;
 using fiddlyNodes.Nodes;
 using Raylib_cs;
 
@@ -33,14 +34,13 @@ public class Program
 		Hierarchy.AddChild(OutputContainer);
 		
 		//test data
+		
+		var data = File.OpenRead("autosave.txt");
 		PrimaryOutputNode = new OutputNode(300, 100, GridCanvas);
-		var node2 = new FloatNode(40, 20, GridCanvas);
-		var v = new Vec2Node(80, 40,  GridCanvas);
-		var t = new TranslateNode(500,500, GridCanvas);
-		var node3 = new CircleNode(40, 60, GridCanvas);
-		Console.WriteLine(NodeFactory.SerializeNode(v));
-		Console.WriteLine("---");
-		Console.WriteLine(NodeFactory.SerializeNode(t));
+		NodeFactory.DeserializeProgram(data, false);
+		data.Close();
+
+		
 		while (!Raylib.WindowShouldClose())
 		{
 			//first do inputs and controls.
@@ -61,5 +61,6 @@ public class Program
 				Hierarchy.Transform.Size = new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
 			}
 		}
+		File.WriteAllText("autosave.txt", NodeFactory.SerializeProgram(), Encoding.UTF8);
 	}
 }
