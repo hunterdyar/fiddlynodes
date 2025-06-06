@@ -25,7 +25,6 @@ public class Program
 	{
 		Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
 		Raylib.InitWindow(width,height, "fiddly widdly nodily wodily");
-
 		int canvasWidth = (int)(width * .7f);
 		int outputWidth = width - canvasWidth;
 		GridCanvas = new GridCanvas(0,0,canvasWidth,height);
@@ -46,7 +45,7 @@ public class Program
 		{
 			//first do inputs and controls.
 			Input.Tick();
-			Raylib.ClearBackground(Color.RayWhite);
+			Raylib.ClearBackground(UISettings.Active.BGColor);
 			
 			//draw.
 			Raylib.BeginDrawing();
@@ -54,7 +53,7 @@ public class Program
 			Input.Draw();
 			NodeFinder.Draw();
 			
-			Input.DebugDraw();
+			//Input.DebugDraw();
 			Raylib.EndDrawing();
 
 			if (Raylib.IsWindowResized())

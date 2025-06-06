@@ -44,8 +44,8 @@ public abstract class NodeProperty : Element
 			//.5 for port radius + .1 extra
 			hpad = (int)(InputPort.Transform.Size.X * 0.6);
 		}
-		Raylib.DrawRectangleLines((int)w.X,(int)w.Y,(int)w.Width,(int)w.Height,Color.DarkPurple);
-		//draw property.
+		//debug:
+		// Raylib.DrawRectangleLines((int)w.X,(int)w.Y,(int)w.Width,(int)w.Height,Color.DarkPurple);
 		
 		if (InputPort != null)
 		{

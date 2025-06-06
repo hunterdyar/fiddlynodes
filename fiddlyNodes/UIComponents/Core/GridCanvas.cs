@@ -62,7 +62,7 @@ public class GridCanvas : Element
 		{
 			throw new Exception("Cannot zoom to value of zero.");
 		};
-		
+		zoomValue = _gridTransform.Transform.Size.Y;
 		var visibleResolution = gridDensity * zoomValue;
 		var worldBoundingBox = _transform.WorldBounds;
 		for (var x = worldBoundingBox.X + (offset.X*zoomValue) % visibleResolution; x < worldBoundingBox.X+worldBoundingBox.Width; x += visibleResolution)
@@ -71,11 +71,11 @@ public class GridCanvas : Element
 			{
 				if (zoomValue <= 1)
 				{
-					Raylib.DrawPixel((int)(x), (int)(y), Color.DarkGray);
+					Raylib.DrawPixel((int)(x), (int)(y), UISettings.Active.GridDotColor);
 				}
 				else
 				{
-					Raylib.DrawCircle((int)(x), (int)(y),zoomValue, Color.DarkGray);
+					Raylib.DrawCircle((int)(x), (int)(y),zoomValue, UISettings.Active.GridDotColor);
 				}
 			}
 		}

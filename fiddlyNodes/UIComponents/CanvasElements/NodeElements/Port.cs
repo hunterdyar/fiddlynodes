@@ -47,7 +47,7 @@ public class Port : Element
 	{
 		var world = _transform.WorldPivotPosition;
 		float r = _transform.Size.X / 2;
-		Raylib.DrawCircle((int)world.X,(int)world.Y,r, _hovering ? Color.DarkPurple : Color.Blue);
+		Raylib.DrawCircle((int)world.X,(int)world.Y,r, _hovering ? UISettings.Active.PortHoverColor : UISettings.Active.PortColor);
 		base.Draw();
 	}
 

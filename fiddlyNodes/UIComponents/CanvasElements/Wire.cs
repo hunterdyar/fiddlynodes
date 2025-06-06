@@ -19,10 +19,10 @@ public class Wire(Port from, Port to, WireManager manager) : IHoverable, IEquata
 
 	public void Draw()
 	{
-		var c = _hovering ? Color.Blue : Color.Black;
+		var c = _hovering ? UISettings.Active.WireHoverColor : UISettings.Active.WireColor;
 		if (_markedForDelete)
 		{
-			c = Color.Red;
+			c = UISettings.Active.WireMarkForDeleteColor;
 		}
 		UIDrawHelpers.DrawWire(FromPort.Transform.WorldPivotPosition, ToPort.Transform.WorldPivotPosition, thickness, c);
 	}

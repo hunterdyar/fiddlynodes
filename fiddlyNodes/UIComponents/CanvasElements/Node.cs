@@ -76,10 +76,11 @@ public abstract class Node : GridCanvasElement
 		
 		var bounds = _transform.WorldBounds;
 		float propertyHeight = _propertyUnitPercentage * _transform.Size.Y;
-		Raylib.DrawRectangleRounded(bounds, 0, 3, Color.Beige);
-		Raylib.DrawRectangleRoundedLinesEx(bounds, 0, 3, 2, Color.Orange);
+		Raylib.DrawRectangleRounded(bounds, UISettings.Active.NodeBorderRoundness, 3, UISettings.Active.NodeBGColor);
+		Raylib.DrawRectangleRoundedLinesEx(bounds, UISettings.Active.NodeBorderRoundness, 3, UISettings.Active.NodeBorderThickness, UISettings.Active.NodeBorderColor);
 
-		Raylib.DrawText(_title, (int)bounds.X + 5, (int)bounds.Y, (int)float.Floor(propertyHeight), Color.Black);
+		Raylib.DrawText(_title, (int)bounds.X + 5, (int)bounds.Y, (int)float.Floor(propertyHeight),
+			UISettings.Active.TextColor);
 
 		base.Draw();
 	}
