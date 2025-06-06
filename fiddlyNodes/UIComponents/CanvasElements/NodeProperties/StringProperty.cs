@@ -50,4 +50,9 @@ public class StringProperty : NodeProperty<TString>
 	{
 		return Value;
 	}
+
+	public override string ToString()
+	{
+		return Value.Value;
+	}
 }

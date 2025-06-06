@@ -25,4 +25,10 @@ public class SDFRectProperty : SDFConstantProperty
 		_rect.SetSize(w,h);
 		return new TSDF(_rect);
 	}
+
+	public override IEnumerable<NodeProperty> GetProperties()
+	{
+		yield return Width;
+		yield return Height;
+	}
 }

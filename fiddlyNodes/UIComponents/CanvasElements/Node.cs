@@ -14,7 +14,7 @@ public abstract class Node : GridCanvasElement
 	private readonly string _uid;
 	private bool _dragging = false;
 	protected string _title;
-	public List<NodeProperty> Properties => _nodeProperties;
+
 	private List<NodeProperty> _nodeProperties = new List<NodeProperty>();
 	private float _propertyUnitPercentage;
 	private Vector2 _dragStartPosition;
@@ -137,6 +137,21 @@ public abstract class Node : GridCanvasElement
 		}
 	}
 
+	/// <summary>
+	/// This should return any properties that will have their value serialized and deserialized NOT via wires.
+	/// so input-only properties will be skipped, and parent properties should return their children.
+	/// </summary>
+	public IEnumerable<NodeProperty> GetPropertiesForSerialization()
+	{
+		//each prop and it's children.
+		foreach (NodeProperty property in _nodeProperties)
+		{
+			foreach (NodeProperty nodeProperty in property.GetProperties())
+			{
+				yield return nodeProperty;
+			}
+		}
+	}
 	private void Delete()
 	{
 		foreach (NodeProperty nodeProperty in _nodeProperties)

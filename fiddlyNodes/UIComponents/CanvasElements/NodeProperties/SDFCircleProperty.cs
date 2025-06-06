@@ -21,4 +21,9 @@ public class SDFCircleProperty : SDFConstantProperty
 		_circle.SetRadius(radius.Value);
 		return new TSDF(_circle);
 	}
+
+	public override IEnumerable<NodeProperty> GetProperties()
+	{
+		yield return Radius;
+	}
 }

@@ -103,4 +103,9 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 		
 		return Value;
 	}
+
+	public override string ToString()
+	{
+		return Value.ToString();
+	}
 }

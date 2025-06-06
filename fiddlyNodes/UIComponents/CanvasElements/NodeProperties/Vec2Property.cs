@@ -107,4 +107,15 @@ public class Vec2Property : NodeProperty<TVec2>
 		
 		return Value;
 	}
+
+	public override IEnumerable<NodeProperty> GetProperties()
+	{
+		yield return _x;
+		yield return _y;
+	}
+
+	public override string ToString()
+	{
+		return _x.ToString()+","+_y.ToString();
+	}
 }

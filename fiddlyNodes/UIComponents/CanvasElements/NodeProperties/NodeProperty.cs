@@ -111,6 +111,11 @@ public abstract class NodeProperty : Element
 	{
 		return _node.UID+"/"+propertyName;
 	}
+
+	public virtual IEnumerable<NodeProperty> GetProperties()
+	{
+		yield return this;
+	}
 }
 
 public abstract class NodeProperty<T> : NodeProperty where T : TreeBaseObject

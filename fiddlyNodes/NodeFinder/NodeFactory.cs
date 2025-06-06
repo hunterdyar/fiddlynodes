@@ -55,21 +55,35 @@ public static class NodeFactory
 
 	public static string SerializeNode(Node node)
 	{
-		// StringBuilder sb = new StringBuilder();
-		// sb.Append("{");
-		// sb.AppendLine("node: ");
-		//{
-		//node
-		//type
-		//properties = [
+		var aliases = GetNodeAliasesFromType(node.GetType());
+		if (aliases.Length == 0)
+		{
+			return String.Empty;
+		}
+		var nodeType = aliases[0];
+
+		//todo: need to create a path system for each node. give it an optional id in constructor, and it passes to it's children.
+		var properties = node.GetPropertiesForSerialization();
+		var nodeData = new NodeData()
+		{
+			ID = node.UID,
+			Type = nodeType,
+			//node.properties needs to get subProperties. GetPath needs have all of them,
+			
+			//we only need to serialize properties that have been set Connected ones can/should be ignored.
+			Properties = properties.Select(x => x.GetPath()).ToArray(),
+			Values = properties.Select(x => x.ToString()).ToArray()
+		};
+		return System.Text.Json.JsonSerializer.Serialize(nodeData);
 		
-		//]
-		//}{
-		//wires[
-		//from nodeid/name
-		//to nodeid/name
-		//
 		return node.UID;
+	}
+
+	public static void DeserializeData(string saveData)
+	{
+		//get the section on nodes.
+		//get the section on wires.
+		//get the section on options.
 	}
 	
 	public static string GetUniqueID(){
@@ -92,5 +106,13 @@ public static class NodeFactory
 			return Convert.ToBase64String(Encoding.UTF8.GetBytes(output)).Replace("/", "_")
 				.Replace("+", "-").Replace("==", "");
 	}
-	
+
+	[Serializable]
+	public struct NodeData
+	{
+		public string ID { get; set; }
+		public string Type { get; set; }
+		public string[] Properties {get;set;}
+		public string[] Values {get;set;}
+	}
 }
