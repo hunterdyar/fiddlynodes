@@ -13,6 +13,7 @@ public class SDFRectProperty : SDFConstantProperty
 	{
 		Width = wProp;
 		Height = hProp;
+		Serialize = true;
 		_rect = new Rect(Width.Value.Value, Height.Value.Value);
 		propertyName = "sdfrect";
 	}

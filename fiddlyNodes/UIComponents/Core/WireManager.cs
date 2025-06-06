@@ -210,9 +210,11 @@ public class WireManager
 			select item).ToList();
 	}
 
-	public void CreateWireFromData(NodeFactory.WireData wireData)
+	public void AddWireFromData(NodeFactory.WireData wireData)
 	{
 		var path = wireData.FromPath.Trim('/').Split('/');
+		
+		//todo: dictionary.
 		var fnode = Program.GridCanvas.GetAllNodes().Find(n => n.UID == path[0]);
 		var subpath = "";
 		for (int i = 1; i < path.Length-1; i++)
@@ -220,26 +222,28 @@ public class WireManager
 			subpath += path[i] + (i < path.Length-2 ? "/" : "");
 		}
 		var fromProp = fnode.GetPropertyByPath(subpath);
-		if (path[^1] == "in")
+		if (fromProp == null)
 		{
-			
+			throw new Exception("Could not find property " + subpath);
 		}
+		var fromPort = fromProp.GetPort(PortPosition.Output);
+		
 
-		path = wireData.FromPath.Trim('/').Split('/');
+		path = wireData.ToPath.Trim('/').Split('/');
 		var tnode = Program.GridCanvas.GetAllNodes().Find(n => n.UID == path[0]);
 		subpath = "";
 		for (int i = 1; i < path.Length - 1; i++)
 		{
-			subpath += path[i] + (i < path.Length - 1 ? "/" : "");
+			subpath += path[i] + (i < path.Length - 2 ? "/" : "");
 		}
 
 		var toProp = tnode.GetPropertyByPath(subpath);
-		if (path[^1] == "in")
+		var toPort = toProp.GetPort(PortPosition.Input);
+		if (toPort == null)
 		{
-
+			throw new Exception("Could not find property " + subpath);
 		}
-		
-		
+		DoAddWire(new Wire(fromPort, toPort, this));
 	}
 	
 }

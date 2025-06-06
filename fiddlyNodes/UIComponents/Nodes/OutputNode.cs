@@ -17,5 +17,5 @@ public class OutputNode : Node
 	
 	public TSDF GetValue() => sdfProp.GetValue();
 	public new static string DisplayName => "Output";
-	public new static string[] Aliases => [];//no aliases means this one wont show up in search results.
+	public new static string[] Aliases => ["output"];//no aliases means this one won't show up in search results.
 }

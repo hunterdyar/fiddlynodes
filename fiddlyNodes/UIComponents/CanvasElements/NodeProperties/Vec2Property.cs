@@ -18,6 +18,7 @@ public class Vec2Property : NodeProperty<TVec2>
 	
 	public Vec2Property(string propertyName, Node node, PortPosition inputOrOutput) : base(propertyName, node)
 	{
+		Serialize = true;
 		PropHeight = 5;//label, x, y.
 		_label = new Label("Vector 2", TextPosition.Center);
 		_x = new NumberProperty("X", node, PortPosition.Input, this);
@@ -117,5 +118,12 @@ public class Vec2Property : NodeProperty<TVec2>
 	public override string ToString()
 	{
 		return _x.ToString()+","+_y.ToString();
+	}
+
+	public override void SetValueFromString(string value)
+	{
+		var val = value.Split(',');
+		_x.SetValueFromString(val[0]);
+		_y.SetValueFromString(val[1]);
 	}
 }

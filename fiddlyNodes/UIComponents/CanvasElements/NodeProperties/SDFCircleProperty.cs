@@ -10,6 +10,7 @@ public class SDFCircleProperty : SDFConstantProperty
 	private Circle _circle;
 	public SDFCircleProperty(string propertyName, NumberProperty radiusProp, Node node) : base(propertyName, node)
 	{
+		Serialize = true;
 		Radius = radiusProp;
 		_circle = new Circle(radiusProp.Value.Value);
 	}

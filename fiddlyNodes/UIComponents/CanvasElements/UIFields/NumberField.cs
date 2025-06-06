@@ -6,7 +6,12 @@ public class NumberField : TextField
 {
 	//todo: fix this the input class needs a seperate thing for AddLetter
 	public string TextValue => _text.Value;
-	public float Value => Math.Clamp(float.Parse(_text.Value),minValue,maxValue);
+	public float Value
+	{
+		get => Math.Clamp(float.Parse(_text.Value), minValue, maxValue);
+		set => _text.Value = value.ToString();
+	}
+
 	public float minValue = float.NegativeInfinity;
 	public float maxValue = float.PositiveInfinity;
 	public NumberField(float minValue = float.NegativeInfinity, float maxValue = float.PositiveInfinity) : base(0, 0, 0, 0)

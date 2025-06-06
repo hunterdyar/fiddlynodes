@@ -15,6 +15,10 @@ public abstract class NodeProperty : Element
 	protected string propertyName;
 	public Node Node => _node;
 	private Node _node;
+	/// <summary>
+	/// False for properties that don't have fields/values (only connections), so we don't bother writing/reading them from the disk.
+	/// </summary>
+	public bool Serialize;
 
 	protected NodeProperty _parentProperty;
 	
@@ -113,7 +117,7 @@ public abstract class NodeProperty : Element
 	{
 		if (_parentProperty == null)
 		{
-			return (includeNode ? _node.UID+"/" : "/") + propertyName;
+			return (includeNode ? _node.UID+"/" : "") + propertyName;
 		}
 		else
 		{
@@ -128,7 +132,22 @@ public abstract class NodeProperty : Element
 
 	public virtual void SetValueFromString(string value)
 	{
-		throw new NotImplementedException();
+		if (Serialize)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	public Port GetPort(PortPosition pos)
+	{
+		if (pos == PortPosition.Output)
+		{
+			return OutputPort;
+		}else if (pos == PortPosition.Input)
+		{
+			return InputPort;
+		}
+		return null;
 	}
 }
 

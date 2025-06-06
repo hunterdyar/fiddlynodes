@@ -17,6 +17,7 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 	public NumberProperty(string propertyName, Node node, PortPosition inputOrOutput, NodeProperty parent = null) : base(propertyName, node)
 	{
 		PropHeight = 2;
+		Serialize = true;
 		_label = new Label(propertyName, TextPosition.Center);
 		_number = new NumberField(0);
 		_number.OnChange += (value) => OnValuesChange();
@@ -108,7 +109,7 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 	public override string ToString()
 	{
 		//todo: unit.
-		return Value.ToString() + "_" + _unit.ToString();
+		return _number.Value.ToString() + "_" + _unit.ToString();
 	}
 
 	public override void SetValueFromString(string value)
@@ -116,10 +117,9 @@ public class NumberProperty : NodeProperty<TFloat>, IChangeReporter<TFloat>
 		var s = value.Split('_');
 		var f = s[0];
 		var u = s[1];
-		if(float.TryParse(f, out var val))
-		{
-			Value.Value = val;
-		}
+		//change underlying values then call onChange to update this.
+		_number.SetValue(f);
 		_unit.SetFromString(u);
+		OnValuesChange();
 	}
 }

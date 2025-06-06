@@ -8,7 +8,12 @@ public class TextInputHandler
 	public int CursorPos => _cursorPosition;
 	private int _cursorPosition;
 	
-	public string Value => _value;
+	public string Value
+	{
+		get => _value;
+		set => _value = value;
+	}
+
 	private string _value = string.Empty;
 	private Func<char, bool> _isValid;
 	public Action<string> OnChange { get; set; }

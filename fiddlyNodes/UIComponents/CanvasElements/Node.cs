@@ -180,8 +180,14 @@ public abstract class Node : GridCanvasElement
 
 	public NodeProperty GetPropertyByPath(string subpath)
 	{
-		//todo: this isn't quite working.
-		var y = _nodeProperties.ToList();
+		//search primary properties.
+		var np = _nodeProperties.Find(x => x.PropertyName == subpath);
+		if (np != null)
+		{
+			return np;
+		}
+		//okay, search sub properties now.
+		var y = GetPropertiesForSerialization().ToList();
 		return y.Find(x=>x.GetPath(false) == subpath);
 	}
 }

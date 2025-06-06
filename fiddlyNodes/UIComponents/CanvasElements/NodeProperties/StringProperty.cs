@@ -12,6 +12,7 @@ public class StringProperty : NodeProperty<TString>
 	private TString Value => new TString(_field.TextValue);
 	public StringProperty(string propertyName, Node node) : base(propertyName, node)
 	{
+		Serialize = true;
 		_field = new TextField(0, 0, 20, 12);
 		AddChild(_field);
 		MinWidth = propertyName.Length * Raylib.GetFontDefault().BaseSize;

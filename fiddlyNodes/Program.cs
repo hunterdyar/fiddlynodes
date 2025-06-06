@@ -34,13 +34,8 @@ public class Program
 		Hierarchy.AddChild(OutputContainer);
 		
 		//test data
-		
-		var data = File.OpenRead("autosave.txt");
-		PrimaryOutputNode = new OutputNode(300, 100, GridCanvas);
-		NodeFactory.DeserializeProgram(data, false);
-		data.Close();
+		LoadFile();
 
-		
 		while (!Raylib.WindowShouldClose())
 		{
 			//first do inputs and controls.
@@ -62,5 +57,18 @@ public class Program
 			}
 		}
 		File.WriteAllText("autosave.txt", NodeFactory.SerializeProgram(), Encoding.UTF8);
+	}
+
+	private static void LoadFile()
+	{
+		var data = File.OpenRead("autosave.txt");
+		NodeFactory.DeserializeProgram(data, false);
+		PrimaryOutputNode = (OutputNode)GridCanvas.GetAllNodes().Find(x=>x.GetType() == typeof(OutputNode));
+		data.Close();
+	}
+
+	private static void LoadEmptyFile()
+	{
+		PrimaryOutputNode = new OutputNode(300, 150, GridCanvas);
 	}
 }

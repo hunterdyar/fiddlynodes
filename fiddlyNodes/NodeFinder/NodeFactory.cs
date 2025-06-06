@@ -64,7 +64,7 @@ public static class NodeFactory
 		var nodeType = aliases[0];
 
 		//todo: need to create a path system for each node. give it an optional id in constructor, and it passes to it's children.
-		var properties = node.GetPropertiesForSerialization().Distinct();
+		var properties = node.GetPropertiesForSerialization().Distinct().Where(x=>x.Serialize);
 		var nodeData = new NodeData()
 		{
 			ID = node.UID,
@@ -113,7 +113,7 @@ public static class NodeFactory
 
 		foreach (WireData wireData in pd.WireData)
 		{
-			Program.GridCanvas.WireManager.CreateWireFromData(wireData);
+			Program.GridCanvas.WireManager.AddWireFromData(wireData);
 		}
 	}
 	public static ProgramData GetProgramData()
@@ -205,6 +205,12 @@ public static class NodeFactory
 				var newNode = node.CreateNodeFunction.Invoke();
 				newNode.UID = ID;
 				newNode.Transform.LocalPosition = new Vector2(x,y);
+				for (var i = 0; i < Properties.Length; i++)
+				{
+					string? p = Properties[i];
+					var np = newNode.GetPropertyByPath(p);
+					np.SetValueFromString(Values[i]);
+				}
 			}
 		}
 	}
