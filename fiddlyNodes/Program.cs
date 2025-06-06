@@ -56,15 +56,25 @@ public class Program
 				Hierarchy.Transform.Size = new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
 			}
 		}
-		File.WriteAllText("autosave.txt", NodeFactory.SerializeProgram(), Encoding.UTF8);
+		File.WriteAllText("autosave.json", NodeFactory.SerializeProgram(), Encoding.UTF8);
 	}
 
-	private static void LoadFile()
+	private static void LoadFile(string path = "autosave.json")
 	{
-		var data = File.OpenRead("autosave.txt");
-		NodeFactory.DeserializeProgram(data, false);
-		PrimaryOutputNode = (OutputNode)GridCanvas.GetAllNodes().Find(x=>x.GetType() == typeof(OutputNode));
-		data.Close();
+		try
+		{
+			var data = File.OpenRead(path);
+			NodeFactory.DeserializeProgram(data, false);
+			PrimaryOutputNode = (OutputNode)GridCanvas.GetAllNodes().Find(x => x.GetType() == typeof(OutputNode));
+			data.Close();
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine($"Unable to load file {path}");
+			Console.WriteLine(e);
+			LoadEmptyFile();
+		}
+		
 	}
 
 	private static void LoadEmptyFile()
