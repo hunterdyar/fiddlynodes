@@ -8,7 +8,6 @@ namespace fiddlyNodes;
 
 public class Program
 {
-	
 	public readonly static CommandSystem Commands = new CommandSystem();
 	public readonly static InputManager Input = new InputManager();
 	public readonly static SaveManager SaveManager = new SaveManager();
@@ -24,32 +23,15 @@ public class Program
 	private static int height = 600;
 	public static void Main()
 	{
-		Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
-		Raylib.InitWindow(width,height, "fiddly widdly nodily wodily");
-		int canvasWidth = (int)(width * .7f);
-		int outputWidth = width - canvasWidth;
-		GridCanvas = new GridCanvas(0,0,canvasWidth,height);
-		OutputContainer = new OutputContainer(canvasWidth,0,outputWidth,outputWidth);
-		Hierarchy.AddChild(GridCanvas);
-		Hierarchy.AddChild(OutputContainer);
+		Init();
 		
 		//test data
-		LoadFile();
+		LoadFile("autosave.json");
 
 		while (!Raylib.WindowShouldClose())
 		{
 			//first do inputs and controls.
-			Input.Tick();
-			Raylib.ClearBackground(UISettings.Active.BGColor);
-			
-			//draw.
-			Raylib.BeginDrawing();
-			Hierarchy.Draw();
-			Input.Draw();
-			NodeFinder.Draw();
-			
-			//Input.DebugDraw();
-			Raylib.EndDrawing();
+			Update();
 
 			if (Raylib.IsWindowResized())
 			{
@@ -59,6 +41,47 @@ public class Program
 		File.WriteAllText("autosave.json", NodeFactory.SerializeProgram(), Encoding.UTF8);
 	}
 
+	public static void Update()
+	{
+		Input.Tick();
+		Raylib.ClearBackground(UISettings.Active.BGColor);
+
+		//draw.
+		Raylib.BeginDrawing();
+		Hierarchy.Draw();
+		Input.Draw();
+		NodeFinder.Draw();
+
+		//Input.DebugDraw();
+		Raylib.EndDrawing();
+	}
+
+	public static void Init()
+	{
+		Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
+		Raylib.InitWindow(width, height, "fiddly widdly nodily wodily");
+		int canvasWidth = (int)(width * .7f);
+		int outputWidth = width - canvasWidth;
+		GridCanvas = new GridCanvas(0, 0, canvasWidth, height);
+		OutputContainer = new OutputContainer(canvasWidth, 0, outputWidth, outputWidth);
+		Hierarchy.AddChild(GridCanvas);
+		Hierarchy.AddChild(OutputContainer);
+	}
+
+	private static void LoadProgram(string data)
+	{
+		try
+		{
+			NodeFactory.DeserializeProgram(data, false);
+			PrimaryOutputNode = (OutputNode)GridCanvas.GetAllNodes().Find(x => x.GetType() == typeof(OutputNode));
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine($"Unable to program.");
+			Console.WriteLine(e);
+			LoadEmptyFile();
+		}
+	}
 	private static void LoadFile(string path = "autosave.json")
 	{
 		try
@@ -80,5 +103,10 @@ public class Program
 	private static void LoadEmptyFile()
 	{
 		PrimaryOutputNode = new OutputNode(300, 150, GridCanvas);
+	}
+
+	public static void Close()
+	{
+		Raylib.CloseWindow();
 	}
 }

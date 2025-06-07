@@ -90,21 +90,43 @@ public static class NodeFactory
 		});
 	}
 
+	private static void ClearProgram()
+	{
+		foreach (var wire in Program.GridCanvas.WireManager.GetAllWires())
+		{
+			Program.GridCanvas.WireManager.RemoveWire(wire);
+		}
+
+		foreach (var node in Program.GridCanvas.GetAllNodes().ToArray())
+		{
+			Program.GridCanvas.RemoveNode(node);
+		}
+	}
 	public static void DeserializeProgram(Stream saveData, bool clearFirst)
 	{
 		if (clearFirst)
 		{
-			foreach (var wire in Program.GridCanvas.WireManager.GetAllWires())
-			{
-				Program.GridCanvas.WireManager.RemoveWire(wire);
-			}
-
-			foreach (var node in Program.GridCanvas.GetAllNodes().ToArray())
-			{
-				Program.GridCanvas.RemoveNode(node);
-			}
+			ClearProgram();
 		}
 		
+		var pd = System.Text.Json.JsonSerializer.Deserialize<ProgramData>(saveData);
+		foreach (var nodeData in pd.NodeData)
+		{
+			nodeData.CreateNode();
+		}
+		foreach (WireData wireData in pd.WireData)
+		{
+			Program.GridCanvas.WireManager.AddWireFromData(wireData);
+		}
+	}
+
+	public static void DeserializeProgram(string saveData, bool clearFirst)
+	{
+		if (clearFirst)
+		{
+			ClearProgram();
+		}
+
 		var pd = System.Text.Json.JsonSerializer.Deserialize<ProgramData>(saveData);
 		foreach (var nodeData in pd.NodeData)
 		{
